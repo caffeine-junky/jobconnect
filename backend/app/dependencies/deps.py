@@ -9,7 +9,8 @@ from app.repository import (
     ReviewRepository,
     ServiceRepository,
     SearchRepository,
-    NotificationRepository
+    NotificationRepository,
+    TechnicianAvailabilityRepository,
 )
 from app.services import (
     AdminService,
@@ -20,7 +21,8 @@ from app.services import (
     ServiceService,
     SearchService,
     AuthService,
-    NotificationService
+    NotificationService,
+    TechnicianAvailablityService,
 )
 
 
@@ -130,6 +132,20 @@ async def get_notification_service(
     return NotificationService(repo)
 
 
+async def get_technician_availability_repository(
+    db: AsyncDatabase = Depends(get_db),
+) -> TechnicianAvailabilityRepository:
+    return TechnicianAvailabilityRepository(db)
+
+
+async def get_technician_availability_service(
+    repo: TechnicianAvailabilityRepository = Depends(
+        get_technician_availability_repository
+    ),
+) -> TechnicianAvailablityService:
+    return TechnicianAvailablityService(repo)
+
+
 db_dependency = Annotated[AsyncDatabase, Depends(get_db)]
 
 admin_repository_dependency = Annotated[AdminRepository, Depends(get_admin_repository)]
@@ -176,4 +192,12 @@ notification_repository_dependency = Annotated[
 
 notification_service_dependency = Annotated[
     NotificationService, Depends(get_notification_service)
+]
+
+technician_availability_repository_dependency = Annotated[
+    TechnicianAvailabilityRepository, Depends(get_technician_availability_repository)
+]
+
+technician_availability_service_dependency = Annotated[
+    TechnicianAvailablityService, Depends(get_technician_availability_service)
 ]

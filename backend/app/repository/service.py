@@ -15,7 +15,7 @@ class ServiceRepository:
             name=record["name"],
             description=record["description"],
             id=record["id"],
-            created_at=record["created_at"]
+            created_at=record["created_at"],
         )
 
     async def exists(self, service_name: str) -> bool:

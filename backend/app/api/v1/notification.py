@@ -10,16 +10,14 @@ router: APIRouter = APIRouter(prefix="/notification", tags=["Notification"])
 
 @router.post("/", response_model=NotificationResponse, status_code=201)
 async def create_notification(
-    data: NotificationCreate,
-    notification_service: notification_service_dependency
+    data: NotificationCreate, notification_service: notification_service_dependency
 ) -> NotificationResponse:
     return await notification_service.create_notification(data)
 
 
 @router.get("/{notification_id}", response_model=NotificationResponse, status_code=200)
 async def read_notification(
-    notification_id: UUID,
-    notification_service: notification_service_dependency
+    notification_id: UUID, notification_service: notification_service_dependency
 ) -> NotificationResponse:
     return await notification_service.read_notification(notification_id)
 
@@ -29,7 +27,7 @@ async def readall_notifications(
     read: Optional[bool] = None,
     skip: int = 0,
     limit: int = 100,
-    notification_service: NotificationService = Depends(get_notification_service)
+    notification_service: NotificationService = Depends(get_notification_service),
 ) -> List[NotificationResponse]:
     return await notification_service.readall_notifications(read, skip, limit)
 
@@ -40,9 +38,12 @@ async def readall_notifications_by_client(
     read: Optional[bool] = None,
     skip: int = 0,
     limit: int = 100,
-    notification_service: NotificationService = Depends(get_notification_service)
+    notification_service: NotificationService = Depends(get_notification_service),
 ) -> List[NotificationResponse]:
-    return await notification_service.readall_notifications_by_client_id(client_id, read, skip, limit)
+    return await notification_service.readall_notifications_by_client_id(
+        client_id, read, skip, limit
+    )
+
 
 @router.get("/", response_model=List[NotificationResponse], status_code=200)
 async def readall_notifications_by_technician(
@@ -50,6 +51,8 @@ async def readall_notifications_by_technician(
     read: Optional[bool] = None,
     skip: int = 0,
     limit: int = 100,
-    notification_service: NotificationService = Depends(get_notification_service)
+    notification_service: NotificationService = Depends(get_notification_service),
 ) -> List[NotificationResponse]:
-    return await notification_service.readall_notifications_by_techniian_id(technician_id, read, skip, limit)
+    return await notification_service.readall_notifications_by_techniian_id(
+        technician_id, read, skip, limit
+    )

@@ -6,6 +6,7 @@ from .review import ReviewRepository
 from .service import ServiceRepository
 from .search import SearchRepository
 from .notification import NotificationRepository
+from .technician_availability import TechnicianAvailabilityRepository
 
 __all__ = [
     "AdminRepository",
@@ -15,5 +16,6 @@ __all__ = [
     "ReviewRepository",
     "ServiceRepository",
     "SearchRepository",
-    "NotificationRepository"
+    "NotificationRepository",
+    "TechnicianAvailabilityRepository",
 ]

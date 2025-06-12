@@ -105,6 +105,15 @@ CREATE TABLE IF NOT EXISTS verified_technician (
     FOREIGN KEY (admin_id) REFERENCES admin (id)
 );
 
+CREATE TABLE IF NOT EXISTS technician_availability (
+    technician_id UUID NOT NULL,
+    day SMALLINT NOT NULL CHECK (day >= 0 AND day <= 6),
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    PRIMARY KEY (technician_id),
+    FOREIGN KEY (technician_id) REFERENCES technician (id)
+);
+
 -- Indexes
 -- 1. Add `search_vector` column if it doesn't exist
 DO $$

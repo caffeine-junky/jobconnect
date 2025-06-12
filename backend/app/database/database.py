@@ -1,6 +1,6 @@
 from loguru import logger
 from typing import Optional, Any
-from asyncpg import Record, Pool, create_pool # type: ignore
+from asyncpg import Record, Pool, create_pool  # type: ignore
 from fastapi import HTTPException
 from pathlib import Path
 
@@ -37,7 +37,7 @@ class AsyncDatabase:
         await self._connection_pool.close()
         self._connection_pool = None
         logger.success(f"Disconnected from the {self._database} database.")
-    
+
     async def initialize(self) -> None:
         """"""
         try:
@@ -51,18 +51,18 @@ class AsyncDatabase:
         """Execute a query on the database."""
         if self._connection_pool is None:
             raise HTTPException(status_code=500, detail="Database is not connected.")
-        async with self._connection_pool.acquire() as connection: # type: ignore
-            async with connection.transaction(): # type: ignore
-                return await connection.execute(query, *values) # type: ignore
+        async with self._connection_pool.acquire() as connection:  # type: ignore
+            async with connection.transaction():  # type: ignore
+                return await connection.execute(query, *values)  # type: ignore
 
     async def fetchone(self, query: str, *values: Any) -> Optional[Record]:
         """Fetch one record from the database."""
         if self._connection_pool is None:
             raise HTTPException(status_code=500, detail="Database is not connected.")
         try:
-            async with self._connection_pool.acquire() as connection: # type: ignore
-                async with connection.transaction(): # type: ignore
-                    return await connection.fetchrow(query, *values) # type: ignore
+            async with self._connection_pool.acquire() as connection:  # type: ignore
+                async with connection.transaction():  # type: ignore
+                    return await connection.fetchrow(query, *values)  # type: ignore
         except Exception as e:
             logger.error(f"Failed to fetch record from database: {e}")
             return None
@@ -71,6 +71,6 @@ class AsyncDatabase:
         """Fetch all records from the database."""
         if self._connection_pool is None:
             raise HTTPException(status_code=500, detail="Database is not connected.")
-        async with self._connection_pool.acquire() as connection: # type: ignore
-            async with connection.transaction(): # type: ignore
-                return await connection.fetch(query, *values) # type: ignore
+        async with self._connection_pool.acquire() as connection:  # type: ignore
+            async with connection.transaction():  # type: ignore
+                return await connection.fetch(query, *values)  # type: ignore

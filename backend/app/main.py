@@ -17,7 +17,7 @@ async def lifespan(app: FastAPI):
         database=settings.DATABASE_NAME,
         username=settings.DATABASE_USER,
         password=settings.DATABASE_PASSWORD,
-        port=settings.DATABASE_PORT
+        port=settings.DATABASE_PORT,
     )
 
     await app.state.db.connect()
@@ -56,5 +56,5 @@ async def index() -> dict[str, str | None]:
         "docs": app.docs_url,
         "openapi": app.openapi_url,
         "redoc": app.redoc_url,
-        "mode": "development" if settings.DEBUG else "production"
+        "mode": "development" if settings.DEBUG else "production",
     }

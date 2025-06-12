@@ -13,18 +13,16 @@ router: APIRouter = APIRouter(prefix="/admin", tags=["Admin"])
 
 @router.post("/", response_model=AdminResponse, status_code=201)
 async def create_admin(
-    data: AdminCreate,
-    service: admin_service_dependency
-    ) -> AdminResponse:
+    data: AdminCreate, service: admin_service_dependency
+) -> AdminResponse:
     """"""
     return await service.create_admin(data)
 
 
 @router.get("/{admin_id}", response_model=AdminResponse, status_code=200)
 async def readone_admin(
-    admin_id: UUID,
-    service: admin_service_dependency
-    ) -> AdminResponse:
+    admin_id: UUID, service: admin_service_dependency
+) -> AdminResponse:
     """"""
     return await service.readone_admin(admin_id)
 
@@ -35,35 +33,29 @@ async def readall_admin(
     role: Optional[AdminRole] = None,
     skip: int = 0,
     limit: int = 100,
-    service: AdminService = Depends(get_admin_service)
-    ) -> List[AdminResponse]:
+    service: AdminService = Depends(get_admin_service),
+) -> List[AdminResponse]:
     """"""
     return await service.readall_admins(active, role, skip, limit)
 
 
 @router.put("/{admin_id}", response_model=AdminResponse, status_code=200)
 async def update_admin(
-    admin_id: UUID,
-    data: AdminUpdate,
-    service: admin_service_dependency
-    ) -> AdminResponse:
+    admin_id: UUID, data: AdminUpdate, service: admin_service_dependency
+) -> AdminResponse:
     """"""
     return await service.update_admin(admin_id, data)
 
 
 @router.delete("/{admin_id}", status_code=200)
-async def delete_admin(
-    admin_id: UUID,
-    service: admin_service_dependency
-    ) -> bool:
+async def delete_admin(admin_id: UUID, service: admin_service_dependency) -> bool:
     """"""
     return await service.delete_admin(admin_id)
 
 
 @router.get("/lookup/email/{email}", response_model=AdminResponse, status_code=200)
 async def readone_admin_by_email(
-    email: EmailStr,
-    service: admin_service_dependency
+    email: EmailStr, service: admin_service_dependency
 ) -> AdminResponse:
     """"""
     return await service.readone_admin_by_email(email)
@@ -71,10 +63,8 @@ async def readone_admin_by_email(
 
 @router.post("/{admin_id}/verify/{technician_id}", status_code=200)
 async def verify_technician(
-    admin_id: UUID,
-    technician_id: UUID,
-    service: admin_service_dependency
-    ) -> bool:
+    admin_id: UUID, technician_id: UUID, service: admin_service_dependency
+) -> bool:
     """"""
     return await service.verify_technician(admin_id, technician_id)
 
@@ -85,7 +75,7 @@ async def set_user_active_status(
     user_id: UUID,
     role: UserRole,
     status: bool,
-    service: admin_service_dependency
-    ) -> bool:
+    service: admin_service_dependency,
+) -> bool:
     """"""
     return await service.set_user_active_status(admin_id, user_id, role, status)

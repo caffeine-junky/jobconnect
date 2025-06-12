@@ -18,7 +18,7 @@ created_at
 class NotificationRepository:
     def __init__(self, db: AsyncDatabase):
         self.db = db
-    
+
     def record_to_notification(self, record: Record) -> NotificationInDB:
         return NotificationInDB(
             id=record["id"],
@@ -29,7 +29,7 @@ class NotificationRepository:
             is_read=record["is_read"],
             created_at=record["created_at"],
         )
-    
+
     async def create(self, data: Dict[str, Any]) -> Optional[NotificationInDB]:
         """Create a new notification"""
         query: str = """
@@ -40,16 +40,26 @@ class NotificationRepository:
         values: Tuple[Any, ...] = tuple(data.values())
         notification_record: Optional[Record] = await self.db.fetchone(query, *values)
         return (
-            self.record_to_notification(notification_record) if notification_record is not None else None
+            self.record_to_notification(notification_record)
+            if notification_record is not None
+            else None
         )
-    
+
     async def readone(self, notification_id: UUID) -> Optional[NotificationInDB]:
         """Read one notification from the database"""
         query: str = "SELECT * FROM notification WHERE id = $1"
-        notification_record: Optional[Record] = await self.db.fetchone(query, notification_id)
-        return self.record_to_notification(notification_record) if notification_record is not None else None
-    
-    async def readall(self, read: Optional[bool] = None, skip: int = 0, limit: int = 100) -> List[NotificationInDB]:
+        notification_record: Optional[Record] = await self.db.fetchone(
+            query, notification_id
+        )
+        return (
+            self.record_to_notification(notification_record)
+            if notification_record is not None
+            else None
+        )
+
+    async def readall(
+        self, read: Optional[bool] = None, skip: int = 0, limit: int = 100
+    ) -> List[NotificationInDB]:
         """Read all notifications from the database"""
         filters: List[str] = []
         params: List[Any] = []
@@ -67,20 +77,24 @@ class NotificationRepository:
         values: Tuple[Any, ...] = (*params, skip, limit)
         notification_records: List[Record] = await self.db.fetchall(query, *values)
         return [
-            self.record_to_notification(notification_record) for notification_record in notification_records
+            self.record_to_notification(notification_record)
+            for notification_record in notification_records
         ]
-    
+
     async def delete(self, notification_id: UUID) -> bool:
         """"""
-        result: str = await self.db.execute("DELETE FROM notification WHERE id = $1", notification_id)
+        result: str = await self.db.execute(
+            "DELETE FROM notification WHERE id = $1", notification_id
+        )
         return "0" not in result
-    
+
     async def readall_by_client_id(
         self,
         client_id: UUID,
         read: Optional[bool] = None,
-        skip: int = 0, limit: int = 100
-        ) -> List[NotificationInDB]:
+        skip: int = 0,
+        limit: int = 100,
+    ) -> List[NotificationInDB]:
         """Read all notifications from the database"""
         filters: List[str] = []
         params: List[Any] = []
@@ -100,15 +114,17 @@ class NotificationRepository:
         values: Tuple[Any, ...] = (*params, skip, limit)
         notification_records: List[Record] = await self.db.fetchall(query, *values)
         return [
-            self.record_to_notification(notification_record) for notification_record in notification_records
+            self.record_to_notification(notification_record)
+            for notification_record in notification_records
         ]
-    
+
     async def readall_by_technician_id(
         self,
         technician_id: UUID,
         read: Optional[bool] = None,
-        skip: int = 0, limit: int = 100
-        ) -> List[NotificationInDB]:
+        skip: int = 0,
+        limit: int = 100,
+    ) -> List[NotificationInDB]:
         """Read all notifications from the database"""
         filters: List[str] = []
         params: List[Any] = []
@@ -128,5 +144,6 @@ class NotificationRepository:
         values: Tuple[Any, ...] = (*params, skip, limit)
         notification_records: List[Record] = await self.db.fetchall(query, *values)
         return [
-            self.record_to_notification(notification_record) for notification_record in notification_records
+            self.record_to_notification(notification_record)
+            for notification_record in notification_records
         ]

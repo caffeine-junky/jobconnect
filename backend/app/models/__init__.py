@@ -25,10 +25,12 @@ from .technician_service import (
     TechnicianServiceResponse,
 )
 from .auth import Token, TokenData, LoginRequest
-from .notification import (
-    NotificationInDB,
-    NotificationCreate,
-    NotificationResponse
+from .notification import NotificationInDB, NotificationCreate, NotificationResponse
+from .technician_availability import (
+    TechnicianAvailabilityCreate,
+    TechnicianAvailabilityInDB,
+    TechnicianAvailabilityResponse,
+    TechnicianAvailabilityUpdate,
 )
 
 __all__ = [
@@ -70,5 +72,9 @@ __all__ = [
     "LoginRequest",
     "NotificationInDB",
     "NotificationCreate",
-    "NotificationResponse"
+    "NotificationResponse",
+    "TechnicianAvailabilityCreate",
+    "TechnicianAvailabilityInDB",
+    "TechnicianAvailabilityResponse",
+    "TechnicianAvailabilityUpdate",
 ]

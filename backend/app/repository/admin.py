@@ -1,6 +1,6 @@
 from uuid import UUID
 from typing import Optional, List, Tuple, Dict, Any
-from asyncpg import Record # type: ignore
+from asyncpg import Record  # type: ignore
 from app.database import AsyncDatabase
 from app.models import AdminInDB
 from app.models.enums import AdminRole

@@ -18,7 +18,6 @@ class NotificationInDB(BaseNotification):
 
 
 class NotificationCreate(BaseNotification):
-
     class Config:
         json_schema_extra: Dict[str, Any] = {
             "example": {
@@ -31,7 +30,6 @@ class NotificationCreate(BaseNotification):
 
 
 class NotificationResponse(NotificationInDB):
-
     class Config:
         json_schema_extra: Dict[str, Any] = {
             "example": {

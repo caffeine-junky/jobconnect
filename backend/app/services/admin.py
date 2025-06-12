@@ -60,7 +60,9 @@ class AdminService:
         admin: Optional[AdminInDB] = await self.repo.readone(admin_id)
         if admin is None:
             raise NotFoundException(f"Admin with id '{admin_id}' not found")
-        update_data: Dict[str, Any] = data.model_dump(exclude_unset=True, exclude_none=True)
+        update_data: Dict[str, Any] = data.model_dump(
+            exclude_unset=True, exclude_none=True
+        )
         if len(update_data) == 0:
             return admin_in_db_to_response(admin)
 
