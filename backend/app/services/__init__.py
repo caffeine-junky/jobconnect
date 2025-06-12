@@ -6,6 +6,7 @@ from .review import ReviewService
 from .service import ServiceService
 from .search import SearchService
 from .auth import AuthService
+from .notification import NotificationService
 
 __all__ = [
     "AdminService",
@@ -16,4 +17,5 @@ __all__ = [
     "ServiceService",
     "SearchService",
     "AuthService",
+    "NotificationService",
 ]

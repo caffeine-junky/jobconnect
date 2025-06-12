@@ -25,6 +25,11 @@ from .technician_service import (
     TechnicianServiceResponse,
 )
 from .auth import Token, TokenData, LoginRequest
+from .notification import (
+    NotificationInDB,
+    NotificationCreate,
+    NotificationResponse
+)
 
 __all__ = [
     "AdminInDB",
@@ -63,4 +68,7 @@ __all__ = [
     "Token",
     "TokenData",
     "LoginRequest",
+    "NotificationInDB",
+    "NotificationCreate",
+    "NotificationResponse"
 ]

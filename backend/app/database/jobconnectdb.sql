@@ -71,6 +71,15 @@ CREATE TABLE IF NOT EXISTS service (
     name VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL
 );
+CREATE TABLE IF NOT EXISTS notification (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    client_id UUID FOREIGN KEY REFERENCES client (id),
+    technician_id UUID FOREIGN KEY REFERENCES technician (id),
+    title VARCHAR(255) NOT NULL,
+    message VARCHAR(255) NOT NULL,
+    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+);
 
 CREATE TABLE IF NOT EXISTS favorite_technician (
     client_id UUID NOT NULL,
