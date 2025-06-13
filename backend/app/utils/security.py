@@ -1,11 +1,12 @@
 from typing import ClassVar, Dict, Any
 from datetime import datetime, timedelta, timezone
+from uuid import UUID
 from jose import jwt
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
 
 from app.core import settings
-from app.models import Token, TokenData
+from app.models import TokenData
 
 
 class SecurityUtils:
@@ -30,6 +31,7 @@ class SecurityUtils:
     def create_access_token(cls, data: TokenData, expires_delta: timedelta) -> str:
         """Create a JWT access token"""
         to_encode: Dict[str, Any] = data.model_dump().copy()
+        to_encode["user_id"] = str(to_encode["user_id"])
         expire: datetime = datetime.now(timezone.utc) + expires_delta
         to_encode.update({"exp": expire})
         return jwt.encode(
@@ -37,11 +39,8 @@ class SecurityUtils:
         )
 
     @classmethod
-    def decode_token(cls, token: str) -> Token:
+    def decode_token(cls, token: str) -> TokenData:
         """Decode a JWT token"""
-        return Token(
-            access_token=token,
-            **jwt.decode(
-                token, settings.JWT_SECRET_TOKEN, algorithms=[settings.ALGORITHM]
-            ),
-        )
+        decoded = jwt.decode(token=token, key=settings.JWT_SECRET_TOKEN)
+        decoded["user_id"] = UUID(decoded["user_id"])
+        return TokenData(**decoded)

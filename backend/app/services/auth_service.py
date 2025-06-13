@@ -1,6 +1,7 @@
 from uuid import UUID
 from typing import Optional, Union, Tuple, Dict
 from datetime import timedelta
+from jose import JWTError
 
 from app.models import (
     Token,
@@ -37,7 +38,7 @@ class AuthService:
             UserRole.TECHNICIAN: self._technician_service,
         }
 
-    async def authenticate(self, email: str, password: str, role: UserRole) -> str:
+    async def authenticate(self, email: str, password: str, role: UserRole) -> Token:
         """
         Authenticate user based on role and credentials, then return a JWT token.
         """
@@ -52,17 +53,26 @@ class AuthService:
             raise UnauthorizedException("Invalid credentials")
 
         token_data: TokenData = TokenData(email=user.email, user_id=user.id, role=role)
-        return SecurityUtils.create_access_token(
-            token_data, timedelta(minutes=settings.TOKEN_EXPIRE_MINUTES)
+        access_token: str = SecurityUtils.create_access_token(
+            data=token_data,
+            expires_delta=timedelta(minutes=settings.TOKEN_EXPIRE_MINUTES)
         )
+        return Token(access_token=access_token, token_type="bearer")
 
     async def get_current_user(self, token: str) -> User:
         """
         Decode token and retrieve the current user from the appropriate service.
         """
-        token_data: Token = SecurityUtils.decode_token(token)
-        role: UserRole = token_data.user_role
-        user_id: UUID = token_data.user_id
+        try:
+            payload: TokenData = SecurityUtils.decode_token(token)
+            email: Optional[str] = payload.email
+            user_id: Optional[UUID] = payload.user_id
+            role: Optional[UserRole] = payload.role
+
+            if (email is None) or (user_id is None) or (role is None):
+                raise UnauthorizedException("Could not validate credentials")
+        except JWTError:
+            raise UnauthorizedException("Could not validate credentials")
 
         service: Optional[Union[AdminService, ClientService, TechnicianService]] = (
             self._services.get(role)

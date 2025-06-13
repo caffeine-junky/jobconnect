@@ -24,7 +24,7 @@ from .technician_service import (
     TechnicianServiceCreate,
     TechnicianServiceResponse,
 )
-from .auth import Token, TokenData, LoginRequest
+from .auth_models import Token, TokenData, LoginRequest
 from .notification import NotificationInDB, NotificationCreate, NotificationResponse
 from .technician_availability import (
     TechnicianAvailabilityCreate,

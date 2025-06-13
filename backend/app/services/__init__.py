@@ -5,7 +5,7 @@ from .booking import BookingService
 from .review import ReviewService
 from .service import ServiceService
 from .search import SearchService
-from .auth import AuthService
+from .auth_service import AuthService
 from .notification import NotificationService
 from .technician_availability import TechnicianAvailablityService
 

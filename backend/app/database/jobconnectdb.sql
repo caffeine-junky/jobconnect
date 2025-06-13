@@ -71,15 +71,20 @@ CREATE TABLE IF NOT EXISTS service (
     name VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS notification (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    client_id UUID FOREIGN KEY REFERENCES client (id),
-    technician_id UUID FOREIGN KEY REFERENCES technician (id),
+    client_id UUID,
+    technician_id UUID,
     title VARCHAR(255) NOT NULL,
     message VARCHAR(255) NOT NULL,
     is_read BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    -- Foreign key constraints are typically defined separately or using simpler inline syntax
+    FOREIGN KEY (client_id) REFERENCES client (id),
+    FOREIGN KEY (technician_id) REFERENCES technician (id)
 );
+
 
 CREATE TABLE IF NOT EXISTS favorite_technician (
     client_id UUID NOT NULL,
@@ -110,7 +115,7 @@ CREATE TABLE IF NOT EXISTS technician_availability (
     day SMALLINT NOT NULL CHECK (day >= 0 AND day <= 6),
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
-    PRIMARY KEY (technician_id),
+    PRIMARY KEY (technician_id, day),
     FOREIGN KEY (technician_id) REFERENCES technician (id)
 );
 
