@@ -97,6 +97,13 @@ class TechnicianService:
         """"""
         return await self.repo.delete(technician_id)
 
+    async def readone_technician_by_email(self, email: str) -> TechnicianResponse:
+        """"""
+        technician: Optional[TechnicianInDB] = await self.repo.readone_by_email(email)
+        if technician is None:
+            raise NotFoundException(f"Technician with email '{email}' not found")
+        return technician_in_db_to_response(technician)
+
     async def authenticate(
         self, email: str, password: str
     ) -> Optional[TechnicianResponse]:

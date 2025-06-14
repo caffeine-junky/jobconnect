@@ -59,7 +59,7 @@ class AuthService:
         )
         return Token(access_token=access_token, token_type="bearer")
 
-    async def get_current_user(self, token: str) -> User:
+    async def get_current_user(self, token: str) -> Dict[str, Union[User, UserRole]]:
         """
         Decode token and retrieve the current user from the appropriate service.
         """
@@ -80,12 +80,17 @@ class AuthService:
         if not service:
             raise UnauthorizedException("Invalid token role")
 
+        response: Dict[str, Union[User, UserRole]] = {"role": role}
+
         match role:
             case UserRole.ADMIN:
-                return await service.readone_admin(user_id)  # type: ignore[attr-defined]
+                response["user"] = await service.readone_admin(user_id)  # type: ignore[attr-defined]
             case UserRole.CLIENT:
-                return await service.readone_client(user_id)  # type: ignore[attr-defined]
+                response["user"] = await service.readone_client(user_id)  # type: ignore[attr-defined]
             case UserRole.TECHNICIAN:
-                return await service.readone_technician(user_id)  # type: ignore[attr-defined]
+                response["user"] = await service.readone_technician(user_id)  # type: ignore[attr-defined]
 
-        raise UnauthorizedException("Invalid token")
+        if response.get("user") is None:
+            raise UnauthorizedException("Invalid token")
+
+        return response

@@ -27,14 +27,14 @@ class ReviewService:
             raise InternalServerException("Error creating review")
         return review_in_db_to_response(review)
 
-    async def readone(self, review_id: UUID) -> ReviewResponse:
+    async def readone_review(self, review_id: UUID) -> ReviewResponse:
         """"""
         review: Optional[ReviewInDB] = await self.repo.readone(review_id)
         if review is None:
             raise NotFoundException("Review not found")
         return review_in_db_to_response(review)
 
-    async def readall(
+    async def readall_reviews(
         self,
         client_id: Optional[UUID] = None,
         technician_id: Optional[UUID] = None,
@@ -48,7 +48,7 @@ class ReviewService:
         )
         return [review_in_db_to_response(review) for review in reviews]
 
-    async def update(self, review_id: UUID, data: ReviewUpdate) -> ReviewResponse:
+    async def update_review(self, review_id: UUID, data: ReviewUpdate) -> ReviewResponse:
         """"""
         review: Optional[ReviewInDB] = await self.repo.readone(review_id)
         if review is None:
@@ -60,6 +60,6 @@ class ReviewService:
             raise InternalServerException("Error updating review")
         return review_in_db_to_response(review)
 
-    async def delete(self, review_id: UUID) -> bool:
+    async def delete_review(self, review_id: UUID) -> bool:
         """"""
         return await self.repo.delete(review_id)

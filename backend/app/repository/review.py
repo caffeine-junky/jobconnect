@@ -86,8 +86,8 @@ class ReviewRepository:
         query: str = f"""
         SELECT * FROM review
         {"WHERE " + " AND ".join(filters) if filters else ""}
-        OFFSET {len(params) + 1}
-        LIMIT {len(params) + 2}
+        OFFSET ${len(params) + 1}
+        LIMIT ${len(params) + 2}
         """
         values: Tuple[Any, ...] = (*params, skip, limit)
         review_records: List[Record] = await self.db.fetchall(query, *values)

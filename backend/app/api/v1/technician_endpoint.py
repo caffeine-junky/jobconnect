@@ -1,6 +1,7 @@
 from uuid import UUID
 from fastapi import APIRouter, Depends
 from typing import List, Optional
+from pydantic import EmailStr
 from app.models import TechnicianCreate, TechnicianUpdate, TechnicianResponse
 from app.services import TechnicianService
 from app.dependencies import get_technician_service, technician_service_dependency
@@ -45,6 +46,16 @@ async def update_technician(
 
 
 @router.delete("/{technician_id}", status_code=200)
-async def delete_technician(technician_id: UUID, service: technician_service_dependency) -> bool:
+async def delete_technician(
+    technician_id: UUID, service: technician_service_dependency
+) -> bool:
     """Delete a technician"""
     return await service.delete_technician(technician_id)
+
+
+@router.get("/lookup/{email}", response_model=TechnicianResponse, status_code=200)
+async def readone_technician_by_email(
+    email: EmailStr, service: technician_service_dependency
+) -> TechnicianResponse:
+    """"""
+    return await service.readone_technician_by_email(email)

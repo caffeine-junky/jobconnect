@@ -87,6 +87,13 @@ class ClientService:
         """"""
         return await self.repo.delete(client_id)
 
+    async def readone_client_by_email(self, email: str) -> ClientResponse:
+        """"""
+        client: Optional[ClientInDB] = await self.repo.readone_by_email(email)
+        if client is None:
+            raise NotFoundException(f"Client with email '{email}' not found")
+        return client_in_db_to_response(client)
+
     async def add_favorite_technician(
         self, client_id: UUID, technician_id: UUID
     ) -> bool:

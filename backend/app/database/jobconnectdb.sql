@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS booking (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     client_id UUID NOT NULL,
     technician_id UUID NOT NULL,
-    service_type VARCHAR(255) NOT NULL,
+    service_name VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL,
     booking_date DATE NOT NULL,
     start_time TIME NOT NULL,
@@ -97,6 +97,8 @@ CREATE TABLE IF NOT EXISTS favorite_technician (
 CREATE TABLE IF NOT EXISTS technician_service (
     service_id UUID NOT NULL,
     technician_id UUID NOT NULL,
+    experience_years SMALLINT NOT NULL DEFAULT 0,
+    price NUMERIC NOT NULL DEFAULT 1.0,
     PRIMARY KEY (service_id, technician_id),
     FOREIGN KEY (service_id) REFERENCES service (id),
     FOREIGN KEY (technician_id) REFERENCES technician (id)
@@ -115,6 +117,7 @@ CREATE TABLE IF NOT EXISTS technician_availability (
     day SMALLINT NOT NULL CHECK (day >= 0 AND day <= 6),
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
+    active boolean NOT NULL DEFAULT TRUE,
     PRIMARY KEY (technician_id, day),
     FOREIGN KEY (technician_id) REFERENCES technician (id)
 );

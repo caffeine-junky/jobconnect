@@ -40,7 +40,6 @@ class TechnicianCreate(BaseTechnician):
                     "latitude": -26.243,
                     "longitude": 28.05,
                 },
-                # "services": ["plumbing", "electrical"],
             }
         }
 

@@ -41,7 +41,7 @@ def record_to_technician(record: Record) -> TechnicianInDB:
         is_available=record["is_available"],
         is_verified=record["is_verified"],
         is_active=record["is_active"],
-        created_at=record["created_at"]
+        created_at=record["created_at"],
     )
 
 

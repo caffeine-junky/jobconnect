@@ -95,8 +95,8 @@ class TechnicianAvailabilityRepository:
         query: str = f"""
         SELECT * FROM technician_availability
         {"WHERE " + " AND ".join(filters) if filters else ""}
-        OFFSET {len(params) + 1}
-        LIMIT {len(params) + 2}
+        OFFSET ${len(params) + 1}
+        LIMIT ${len(params) + 2}
         """
         values: Tuple[Any, ...] = (*params, skip, limit)
         technician_availability_records: List[Record] = await self.db.fetchall(
@@ -157,8 +157,8 @@ class TechnicianAvailabilityRepository:
         query: str = f"""
         SELECT * FROM technician_availability
         {"WHERE" + " AND ".join(filters) if filters else ""}
-        OFFSET {len(params) + 1}
-        LIMIT {len(params) + 2}
+        OFFSET ${len(params) + 1}
+        LIMIT ${len(params) + 2}
         """
         values: Tuple[Any, ...] = (*params, skip, limit)
         technician_availability_records: List[Record] = await self.db.fetchall(

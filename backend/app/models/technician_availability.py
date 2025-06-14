@@ -12,6 +12,7 @@ class BaseTechnicianAvailability(BaseModel):
 
 class TechnicianAvailabilityInDB(BaseTechnicianAvailability):
     id: UUID
+    active: bool
 
 
 class TechnicianAvailabilityCreate(BaseTechnicianAvailability):
@@ -23,7 +24,7 @@ class TechnicianAvailabilityCreate(BaseTechnicianAvailability):
                     "day": 1,
                     "start_time": "10:00:00",
                     "end_time": "12:00:00",
-                },
+                }
             }
         }
 
@@ -38,6 +39,7 @@ class TechnicianAvailabilityUpdate(BaseModel):
                     "day": 2,
                     "start_time": "10:00:00",
                     "end_time": "12:00:00",
+                    "active": False
                 },
             }
         }
@@ -53,5 +55,6 @@ class TechnicianAvailabilityResponse(TechnicianAvailabilityInDB):
                 "start_time": "10:00:00",
                 "end_time": "12:00:00",
             },
+            "active": True
         }
     }

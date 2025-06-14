@@ -71,8 +71,8 @@ class NotificationRepository:
         SELECT {RETURN_QUERY}
         FROM notification
         {"WHERE " + " AND ".join(filters) if filters else ""}
-        OFFSET {len(params) + 1}
-        LIMIT {len(params) + 2}
+        OFFSET ${len(params) + 1}
+        LIMIT ${len(params) + 2}
         """
         values: Tuple[Any, ...] = (*params, skip, limit)
         notification_records: List[Record] = await self.db.fetchall(query, *values)
@@ -108,8 +108,8 @@ class NotificationRepository:
         SELECT {RETURN_QUERY}
         FROM notification
         {"WHERE " + " AND ".join(filters) if filters else ""}
-        OFFSET {len(params) + 1}
-        LIMIT {len(params) + 2}
+        OFFSET ${len(params) + 1}
+        LIMIT ${len(params) + 2}
         """
         values: Tuple[Any, ...] = (*params, skip, limit)
         notification_records: List[Record] = await self.db.fetchall(query, *values)
@@ -138,8 +138,8 @@ class NotificationRepository:
         SELECT {RETURN_QUERY}
         FROM notification
         {"WHERE " + " AND ".join(filters) if filters else ""}
-        OFFSET {len(params) + 1}
-        LIMIT {len(params) + 2}
+        OFFSET ${len(params) + 1}
+        LIMIT ${len(params) + 2}
         """
         values: Tuple[Any, ...] = (*params, skip, limit)
         notification_records: List[Record] = await self.db.fetchall(query, *values)

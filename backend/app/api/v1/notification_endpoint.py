@@ -32,7 +32,7 @@ async def readall_notifications(
     return await notification_service.readall_notifications(read, skip, limit)
 
 
-@router.get("/", response_model=List[NotificationResponse], status_code=200)
+@router.get("/client/{client_id}", response_model=List[NotificationResponse], status_code=200)
 async def readall_notifications_by_client(
     client_id: UUID,
     read: Optional[bool] = None,
@@ -45,7 +45,7 @@ async def readall_notifications_by_client(
     )
 
 
-@router.get("/", response_model=List[NotificationResponse], status_code=200)
+@router.get("/technician/{technician_id}", response_model=List[NotificationResponse], status_code=200)
 async def readall_notifications_by_technician(
     technician_id: UUID,
     read: Optional[bool] = None,

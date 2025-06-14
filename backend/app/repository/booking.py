@@ -122,8 +122,8 @@ class BookingRepository:
         query: str = f"""
         SELECT {RETURN_QUERY} FROM booking
         {F"WHERE {" AND ".join(filters)}" if filters else ""}
-        OFFSET {len(params) + 1}
-        LIMIT {len(params) + 2}
+        OFFSET ${len(params) + 1}
+        LIMIT ${len(params) + 2}
         """
         values: Tuple[Any, ...] = (*params, skip, limit)
         booking_records: List[Record] = await self.db.fetchall(query, *values)
