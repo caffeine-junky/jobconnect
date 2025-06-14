@@ -23,6 +23,7 @@ from .technician_service import (
     TechnicianServiceInDB,
     TechnicianServiceCreate,
     TechnicianServiceResponse,
+    TechnicianServiceUpdate,
 )
 from .auth_models import Token, TokenData, LoginRequest
 from .notification import NotificationInDB, NotificationCreate, NotificationResponse
@@ -77,4 +78,5 @@ __all__ = [
     "TechnicianAvailabilityInDB",
     "TechnicianAvailabilityResponse",
     "TechnicianAvailabilityUpdate",
+    "TechnicianServiceUpdate",
 ]

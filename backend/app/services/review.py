@@ -48,7 +48,9 @@ class ReviewService:
         )
         return [review_in_db_to_response(review) for review in reviews]
 
-    async def update_review(self, review_id: UUID, data: ReviewUpdate) -> ReviewResponse:
+    async def update_review(
+        self, review_id: UUID, data: ReviewUpdate
+    ) -> ReviewResponse:
         """"""
         review: Optional[ReviewInDB] = await self.repo.readone(review_id)
         if review is None:

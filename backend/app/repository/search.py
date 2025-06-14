@@ -5,6 +5,7 @@ from app.database import AsyncDatabase
 from app.models import TechnicianInDB
 
 from .technician import record_to_technician
+from loguru import logger
 
 
 class SearchRepository:
@@ -26,60 +27,86 @@ class SearchRepository:
         Returns:
             List of TechnicianInDB objects
         """
-
-        # Base SELECT clause with computed fields like rating
-        select_clause = """
-            t.id,
-            t.fullname,
-            t.email,
-            t.phone,
-            t.hashed_password,
-            t.location_name,
-            ST_X(t.location) AS longitude,
-            ST_Y(t.location) AS latitude,
-            (SELECT AVG(r.rating) FROM review r WHERE r.technician_id = t.id) AS rating,
-            t.is_available,
-            t.is_active,
-            t.created_at
-            ST_Distance(t.location, (SELECT c.location FROM client c WHERE c.id = $1)) AS distance_meters,
-        """
-
-        # Core FROM and WHERE clauses
-        from_where_clause = """
+        # Prepare base query
+        query = f"""
+            SELECT
+                t.id,
+                t.fullname,
+                t.email,
+                t.phone,
+                t.hashed_password,
+                t.location_name,
+                ST_X(t.location::geometry) AS longitude,
+                ST_Y(t.location::geometry) AS latitude,
+                (
+                    SELECT AVG(r.rating)
+                    FROM review r
+                    WHERE r.technician_id = t.id
+                ) AS rating,
+                ARRAY(
+                    SELECT s.name
+                    FROM technician_service ts
+                    JOIN service s ON s.id = ts.service_id
+                    WHERE ts.technician_id = t.id
+                ) AS services,
+                t.is_available,
+                (
+                    SELECT COUNT(*) > 0
+                    FROM verified_technician vt
+                    WHERE vt.technician_id = t.id
+                ) AS is_verified,
+                t.is_active,
+                t.created_at,
+                ST_Distance(
+                    t.location,
+                    (SELECT c.location FROM client c WHERE c.id = $1)
+                ) AS distance_meters
             FROM technician t
-            WHERE ST_DWithin(t.location, (SELECT c.location FROM client c WHERE c.id = $1), $2 * 1000)
-            AND t.is_active = TRUE
+            WHERE
+                ST_Distance(
+                    t.location,
+                    (SELECT c.location FROM client c WHERE c.id = $1)
+                ) / 1000 <= $2
+                AND t.is_active = TRUE
         """
 
-        # Build the full query dynamically
-        query_parts: List[str] = ["SELECT", select_clause, from_where_clause]
-
+        # Parameters for the query
         params: List[Any] = [client_id, radius_km]
 
         # Add optional service filter
-        if service_names is not None and len(service_names) > 0:
-            query_parts.append("""
+        if service_names:
+            query += """
                 AND t.id IN (
                     SELECT ts.technician_id
                     FROM technician_service ts
                     JOIN service s ON ts.service_id = s.id
                     WHERE s.name = ANY($3::text[])
                 )
-            """)
+            """
             params.append(service_names)
 
-        # Pagination
-        query_parts.append(f"OFFSET ${len(params) + 1} LIMIT ${len(params) + 2}")
+        # Add ordering and pagination
+        offset_param_index = len(params) + 1
+        limit_param_index = len(params) + 2
+
+        query += f"""
+            ORDER BY distance_meters ASC
+            OFFSET ${offset_param_index}
+            LIMIT ${limit_param_index}
+        """
         params.extend([skip, limit])
 
-        # Order
-        query_parts.append("ORDER BY distance_meters ASC")
-
-        # Join the query parts into a final SQL string
-        query = " ".join(query_parts)
-
-        # Execute and map results
+        # Execute query
         technician_records: List[Record] = await self.db.fetchall(query, *params)
+        [
+            logger.debug(
+                f"""
+            name: {r["fullname"]}, latitude: {r["latitude"]}, longitude: {r["longitude"]}
+            is {r["distance_meters"] / 1000} KM away
+            """
+            )
+            for r in technician_records
+        ]
         return [record_to_technician(record) for record in technician_records]
 
     async def search_technicians_by_description(
@@ -104,13 +131,20 @@ class SearchRepository:
             t.phone,
             t.hashed_password,
             t.location_name,
-            ST_X(t.location) AS longitude,
-            ST_Y(t.location) AS latitude,
+            ST_X(t.location::geometry) AS longitude,
+            ST_Y(t.location::geometry) AS latitude,
             (SELECT AVG(r.rating) FROM review r WHERE r.technician_id = t.id) AS rating,
+            ARRAY(
+                SELECT s.name
+                FROM technician_service ts
+                JOIN service s ON s.id = ts.service_id
+                WHERE ts.technician_id = t.id
+            ) AS services,
             t.is_available,
+            (SELECT COUNT(*) > 0 FROM verified_technician vt WHERE vt.technician_id = t.id) AS is_verified,
             t.is_active,
             t.created_at,
-            ST_Distance(t.location, c.location) AS distance_meters
+            ST_Distance(t.location::geometry, c.location::geometry) AS distance_meters
         """
 
         # SQL query using the indexed search_vector and distance filtering
@@ -118,7 +152,10 @@ class SearchRepository:
             SELECT {select_clause}
             FROM technician t
             JOIN client c ON c.id = $1
-            WHERE ST_DWithin(t.location, c.location, $2 * 1000)
+            WHERE ST_Distance(
+                    t.location,
+                    c.location
+                ) / 1000 <= $2
             AND EXISTS (
                 SELECT 1
                 FROM technician_service ts

@@ -21,7 +21,7 @@ class TechnicianAvailabilityRepository:
                 start_time=record["start_time"],
                 end_time=record["end_time"],
             ),
-            active=record["active"]
+            active=record["active"],
         )
 
     async def timeslot_exists(self, technician_id: UUID, timeslot: TimeSlotDay) -> bool:

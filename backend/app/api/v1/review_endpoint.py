@@ -10,8 +10,7 @@ router: APIRouter = APIRouter(prefix="/review", tags=["Review"])
 
 @router.post("/", response_model=ReviewResponse, status_code=201)
 async def create_review(
-    data: ReviewCreate,
-    service: review_service_dependency
+    data: ReviewCreate, service: review_service_dependency
 ) -> ReviewResponse:
     """"""
     return await service.create_review(data)
@@ -19,8 +18,7 @@ async def create_review(
 
 @router.get("/{review_id}", response_model=ReviewResponse, status_code=200)
 async def readone_review(
-    review_id: UUID,
-    service: review_service_dependency
+    review_id: UUID, service: review_service_dependency
 ) -> ReviewResponse:
     """"""
     return await service.readone_review(review_id)
@@ -33,17 +31,17 @@ async def readall_review(
     min_rating: Optional[int] = None,
     skip: int = 0,
     limit: int = 100,
-    service: ReviewService = Depends(get_review_service)
+    service: ReviewService = Depends(get_review_service),
 ) -> List[ReviewResponse]:
     """"""
-    return await service.readall_reviews(client_id, technician_id, min_rating, skip, limit)
+    return await service.readall_reviews(
+        client_id, technician_id, min_rating, skip, limit
+    )
 
 
 @router.put("/{review_id}", response_model=ReviewResponse, status_code=200)
 async def update_review(
-    review_id: UUID,
-    data: ReviewUpdate,
-    service: review_service_dependency
+    review_id: UUID, data: ReviewUpdate, service: review_service_dependency
 ) -> ReviewResponse:
     """"""
     return await service.update_review(review_id, data)

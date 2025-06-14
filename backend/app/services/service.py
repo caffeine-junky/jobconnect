@@ -20,6 +20,8 @@ class ServiceService:
 
     async def create_service(self, data: ServiceCreate) -> ServiceResponse:
         """"""
+        data.name = data.name.lower()
+        data.description = data.description.lower()
         if await self.repo.exists(data.name):
             raise ConfictException(f"{data.name} service already exists")
         service: Optional[ServiceInDB] = await self.repo.create(data.model_dump())
@@ -48,6 +50,7 @@ class ServiceService:
         service: Optional[ServiceInDB] = await self.repo.readone(service_id)
         if service is None:
             raise NotFoundException("Service not found")
+        data.description = data.description.lower()
         service: Optional[ServiceInDB] = await self.repo.update(
             service_id, data.model_dump()
         )

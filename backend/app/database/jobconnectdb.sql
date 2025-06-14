@@ -69,7 +69,8 @@ CREATE TABLE IF NOT EXISTS review (
 CREATE TABLE IF NOT EXISTS service (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(255) NOT NULL,
-    description VARCHAR(255) NOT NULL
+    description TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS notification (
@@ -95,11 +96,11 @@ CREATE TABLE IF NOT EXISTS favorite_technician (
 );
 
 CREATE TABLE IF NOT EXISTS technician_service (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     service_id UUID NOT NULL,
     technician_id UUID NOT NULL,
     experience_years SMALLINT NOT NULL DEFAULT 0,
     price NUMERIC NOT NULL DEFAULT 1.0,
-    PRIMARY KEY (service_id, technician_id),
     FOREIGN KEY (service_id) REFERENCES service (id),
     FOREIGN KEY (technician_id) REFERENCES technician (id)
 );

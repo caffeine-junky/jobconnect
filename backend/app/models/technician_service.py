@@ -11,7 +11,8 @@ class BaseTechnicianService(BaseModel):
     price: float = Field(gt=0)
 
 
-class TechnicianServiceInDB(BaseTechnicianService): ...
+class TechnicianServiceInDB(BaseTechnicianService):
+    id: UUID
 
 
 class TechnicianServiceCreate(BaseTechnicianService):
@@ -21,7 +22,7 @@ class TechnicianServiceCreate(BaseTechnicianService):
                 "technician_id": "123e4567-e89b-12d3-a456-426655440000",
                 "service_id": "123e4567-e89b-12d3-a456-426655440000",
                 "experience_years": 2,
-                "price": 150.00
+                "price": 150.00,
             }
         }
 
@@ -34,9 +35,10 @@ class TechnicianServiceResponse(BaseTechnicianService):
     class Config:
         json_schema_extra: Dict[str, Any] = {
             "example": {
+                "id": "123e4567-e89b-12d3-a456-426655440000",
                 "technician_id": "123e4567-e89b-12d3-a456-426655440000",
                 "service_id": "123e4567-e89b-12d3-a456-426655440000",
                 "experience_years": 2,
-                "price": 150.00
+                "price": 150.00,
             }
         }

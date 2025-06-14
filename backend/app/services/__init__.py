@@ -8,6 +8,7 @@ from .search import SearchService
 from .auth_service import AuthService
 from .notification import NotificationService
 from .technician_availability import TechnicianAvailablityService
+from .technician_service import TechnicianServiceService
 
 __all__ = [
     "AdminService",
@@ -20,4 +21,5 @@ __all__ = [
     "AuthService",
     "NotificationService",
     "TechnicianAvailablityService",
+    "TechnicianServiceService",
 ]

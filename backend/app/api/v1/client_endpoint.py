@@ -51,7 +51,9 @@ async def delete_client(client_id: UUID, service: client_service_dependency) -> 
 
 
 @router.get("/lookup/{email}", response_model=ClientResponse, status_code=200)
-async def readone_client_by_email(email: EmailStr, service: client_service_dependency) -> ClientResponse:
+async def readone_client_by_email(
+    email: EmailStr, service: client_service_dependency
+) -> ClientResponse:
     """"""
     return await service.readone_client_by_email(email)
 
@@ -70,4 +72,3 @@ async def remove_favorite_technician(
 ) -> bool:
     """Remove a favorite technician from a client"""
     return await service.remove_favorite_technician(client_id, technician_id)
-    

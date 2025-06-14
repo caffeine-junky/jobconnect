@@ -7,6 +7,7 @@ from .service import ServiceRepository
 from .search import SearchRepository
 from .notification import NotificationRepository
 from .technician_availability import TechnicianAvailabilityRepository
+from .technician_service import TechnicianServiceRepository
 
 __all__ = [
     "AdminRepository",
@@ -18,4 +19,5 @@ __all__ = [
     "SearchRepository",
     "NotificationRepository",
     "TechnicianAvailabilityRepository",
+    "TechnicianServiceRepository",
 ]

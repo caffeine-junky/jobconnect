@@ -89,7 +89,9 @@ class ServiceRepository:
 
     async def readone_by_name(self, service_name: str) -> Optional[ServiceInDB]:
         """Read one service from the database by name"""
-        query: str = "SELECT * FROM service WHERE LOWER(name) = $1"
+        query: str = (
+            "SELECT * FROM service WHERE LOWER(name) LIKE LOWER('%' || $1 || '%')"
+        )
         service_record: Optional[Record] = await self.db.fetchone(
             query, service_name.lower()
         )

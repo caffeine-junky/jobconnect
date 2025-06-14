@@ -88,7 +88,9 @@ class TechnicianAvailablityService:
         technician_id: UUID,
         data: TechnicianAvailabilityUpdate,
     ) -> TechnicianAvailabilityResponse:
-        if await self.repo.timeslot_exists(technician_id, data.timeslot):
+        if data.timeslot is not None and await self.repo.timeslot_exists(
+            technician_id, data.timeslot
+        ):
             raise ConfictException(f"You already have a timeslot at that time and day")
         ta: Optional[TechnicianAvailabilityInDB] = await self.repo.readone(
             technician_availability_id

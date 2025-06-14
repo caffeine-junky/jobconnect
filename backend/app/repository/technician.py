@@ -6,18 +6,23 @@ from app.models import TechnicianInDB
 from app.models.base import Location, PhoneNumber
 
 RETURN_QUERY: str = """
-    id,
-    fullname,
-    email,
-    phone,
-    hashed_password,
-    location_name,
-    ST_X(location::geometry) AS longitude,
-    ST_Y(location::geometry) AS latitude,
-    (SELECT AVG(rating) FROM review WHERE technician_id = id) AS rating,
-    (SELECT name FROM service WHERE id IN (SELECT service_id FROM technician_service WHERE technician_id = id)) AS services,
+    t.id,
+    t.fullname,
+    t.email,
+    t.phone,
+    t.hashed_password,
+    t.location_name,
+    ST_X(t.location::geometry) AS longitude,
+    ST_Y(t.location::geometry) AS latitude,
+    (SELECT AVG(r.rating) FROM review r WHERE technician_id = t.id) AS rating,
+    ARRAY(
+        SELECT s.name
+        FROM technician_service ts
+        JOIN service s ON s.id = ts.service_id
+        WHERE ts.technician_id = t.id
+    ) AS services,
     is_available,
-    (SELECT COUNT(*) > 0 FROM verified_technician WHERE technician_id = id) AS is_verified,
+    (SELECT COUNT(*) > 0 FROM verified_technician vt WHERE vt.technician_id = t.id) AS is_verified,
     is_active,
     created_at
 """
@@ -71,7 +76,7 @@ class TechnicianRepository:
             f"POINT({data['location']['longitude']} {data['location']['latitude']})"
         )
         query: str = f"""
-        INSERT INTO technician (fullname, email, phone, hashed_password, location_name, location)
+        INSERT INTO technician t (fullname, email, phone, hashed_password, location_name, location)
         VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING {RETURN_QUERY}
         """
@@ -94,8 +99,8 @@ class TechnicianRepository:
         """Read one technician from the database"""
         query: str = f"""
         SELECT {RETURN_QUERY}
-        FROM technician
-        WHERE id = $1
+        FROM technician t
+        WHERE t.id = $1
         """
         technician_record: Optional[Record] = await self.db.fetchone(
             query, technician_id
@@ -117,15 +122,15 @@ class TechnicianRepository:
         filters: List[str] = []
         params: List[Any] = []
         if active is not None:
-            filters.append(f"is_active = ${len(filters) + 1}")
+            filters.append(f"t.is_active = ${len(filters) + 1}")
             params.append(active)
         if is_available is not None:
-            filters.append(f"is_available = ${len(filters) + 1}")
+            filters.append(f"t.is_available = ${len(filters) + 1}")
             params.append(is_available)
 
         query: str = f"""
         SELECT {RETURN_QUERY}
-        FROM technician
+        FROM technician t
         {"WHERE " + " AND ".join(filters) if filters else ""}
         OFFSET ${len(params) + 1}
         LIMIT ${len(params) + 2}
@@ -142,11 +147,11 @@ class TechnicianRepository:
     ) -> Optional[TechnicianInDB]:
         """Update an existing technician"""
         updates: List[str] = [
-            f"{key} = ${i}" for i, key in enumerate(data.keys(), start=2)
+            f"t.{key} = ${i}" for i, key in enumerate(data.keys(), start=2)
         ]
         query: str = f"""
-        UPDATE technician SET {", ".join(updates)}
-        WHERE id = $1
+        UPDATE technician t SET {", ".join(updates)}
+        WHERE t.id = $1
         RETURNING {RETURN_QUERY}
         """
         values: Tuple[Any, ...] = (technician_id, *data.values())
@@ -165,7 +170,7 @@ class TechnicianRepository:
 
     async def readone_by_email(self, email: str) -> Optional[TechnicianInDB]:
         """Read one technician from the database using their email"""
-        query: str = f"SELECT {RETURN_QUERY} FROM technician WHERE email = $1"
+        query: str = f"SELECT {RETURN_QUERY} FROM technician t WHERE t.email = $1"
         technician_record: Optional[Record] = await self.db.fetchone(query, email)
         return (
             record_to_technician(technician_record)
