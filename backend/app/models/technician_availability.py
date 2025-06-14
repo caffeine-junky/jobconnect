@@ -30,7 +30,8 @@ class TechnicianAvailabilityCreate(BaseTechnicianAvailability):
 
 
 class TechnicianAvailabilityUpdate(BaseModel):
-    timeslot: TimeSlotDay
+    timeslot: Optional[TimeSlotDay] = None
+    active: Optional[bool] = None
 
     class Config:
         json_schema_extra: Dict[str, Any] = {
