@@ -17,8 +17,8 @@ booking_date,
 start_time,
 end_time,
 location_name,
-ST_X(location) AS longitude,
-ST_Y(location) AS latitude,
+ST_X(location::geometry) AS longitude,
+ST_Y(location::geometry) AS latitude,
 status,
 created_at
 """

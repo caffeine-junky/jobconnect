@@ -12,8 +12,8 @@ RETURN_QUERY: str = """
     phone,
     hashed_password,
     location_name,
-    ST_X(location) AS longitude,
-    ST_Y(location) AS latitude,
+    ST_X(location::geometry) AS longitude,
+    ST_Y(location::geometry) AS latitude,
     is_active,
     created_at
 """
@@ -101,15 +101,14 @@ class ClientRepository:
         filters: List[str] = []
         params: List[Any] = []
         if active is not None:
-            filters.append(f"WHERE is_active = ${len(filters) + 1}")
+            filters.append(f"is_active = ${len(filters) + 1}")
             params.append(active)
 
         query: str = f"""
         SELECT {RETURN_QUERY}
         FROM client
         {f"WHERE {" AND ".join(filters)}" if filters else ""}
-        OFFSET {len(params) + 1}
-        LIMIT {len(params) + 2}
+        OFFSET ${len(params) + 1} LIMIT ${len(params) + 2}
         """
         values: Tuple[Any, ...] = (*params, skip, limit)
         client_records: List[Record] = await self.db.fetchall(query, *values)

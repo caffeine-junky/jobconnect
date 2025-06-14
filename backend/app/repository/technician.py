@@ -12,9 +12,10 @@ RETURN_QUERY: str = """
     phone,
     hashed_password,
     location_name,
-    ST_X(location) AS longitude,
-    ST_Y(location) AS latitude,
+    ST_X(location::geometry) AS longitude,
+    ST_Y(location::geometry) AS latitude,
     (SELECT AVG(rating) FROM review WHERE technician_id = id) AS rating,
+    (SELECT name FROM service WHERE id IN (SELECT service_id FROM technician_service WHERE technician_id = id)) AS services,
     is_available,
     (SELECT COUNT(*) > 0 FROM verified_technician WHERE technician_id = id) AS is_verified,
     is_active,
@@ -36,10 +37,11 @@ def record_to_technician(record: Record) -> TechnicianInDB:
             longitude=record["longitude"],
         ),
         rating=record["rating"] if record["rating"] else 0.0,
+        services=record["services"] if record["services"] else [],
         is_available=record["is_available"],
         is_verified=record["is_verified"],
         is_active=record["is_active"],
-        created_at=record["created_at"],
+        created_at=record["created_at"]
     )
 
 
@@ -125,8 +127,8 @@ class TechnicianRepository:
         SELECT {RETURN_QUERY}
         FROM technician
         {"WHERE " + " AND ".join(filters) if filters else ""}
-        OFFSET {len(params) + 1}
-        LIMIT {len(params) + 2}
+        OFFSET ${len(params) + 1}
+        LIMIT ${len(params) + 2}
         """
         values: Tuple[Any, ...] = (*params, skip, limit)
         technician_records: List[Record] = await self.db.fetchall(query, *values)

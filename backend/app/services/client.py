@@ -69,6 +69,14 @@ class ClientService:
                 update_data.pop("password")
             )
             update_data["hashed_password"] = hashed_password
+        if "location" in update_data:
+            location_point: str = (
+                f"POINT({update_data['location']['longitude']} "
+                f"{update_data['location']['latitude']})"
+            )
+            update_data["location_name"] = update_data["location"]["location_name"]
+            update_data["location"] = location_point
+            update_data.pop("location")
 
         client: Optional[ClientInDB] = await self.repo.update(client_id, update_data)
         if client is None:

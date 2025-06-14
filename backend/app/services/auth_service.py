@@ -55,7 +55,7 @@ class AuthService:
         token_data: TokenData = TokenData(email=user.email, user_id=user.id, role=role)
         access_token: str = SecurityUtils.create_access_token(
             data=token_data,
-            expires_delta=timedelta(minutes=settings.TOKEN_EXPIRE_MINUTES)
+            expires_delta=timedelta(minutes=settings.TOKEN_EXPIRE_MINUTES),
         )
         return Token(access_token=access_token, token_type="bearer")
 

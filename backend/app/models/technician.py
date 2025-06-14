@@ -17,6 +17,7 @@ class TechnicianInDB(BaseTechnician):
     hashed_password: str
     location: Location
     rating: float
+    services: List[str]
     is_available: bool
     is_verified: bool
     is_active: bool
@@ -26,7 +27,6 @@ class TechnicianInDB(BaseTechnician):
 class TechnicianCreate(BaseTechnician):
     password: str = Field(min_length=3)
     location: Location
-    services: List[str]
 
     class Config:
         json_schema_extra: Dict[str, Any] = {
@@ -40,7 +40,7 @@ class TechnicianCreate(BaseTechnician):
                     "latitude": -26.243,
                     "longitude": 28.05,
                 },
-                "services": ["plumbing", "electrical"],
+                # "services": ["plumbing", "electrical"],
             }
         }
 

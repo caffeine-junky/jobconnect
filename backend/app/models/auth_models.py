@@ -17,7 +17,7 @@ class Token(BaseModel):
         json_schema_extra: Dict[str, Any] = {
             "example": {
                 "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-                "token_type": "bearer"
+                "token_type": "bearer",
             }
         }
 
