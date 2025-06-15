@@ -19,7 +19,7 @@ async def create_payment(
 
 @router.get("/{payment_id}", response_model=PaymentResponse, status_code=200)
 async def readone_payment(
-    self, payment_id: UUID, service: payment_service_dependency
+    payment_id: UUID, service: payment_service_dependency
 ) -> PaymentResponse:
     """"""
     return await service.readone_payment(payment_id)
@@ -37,7 +37,7 @@ async def readall_payments(
     service: PaymentService = Depends(get_payment_service)
 ) -> List[PaymentResponse]:
     """"""
-    return service.readall_payments(
+    return await service.readall_payments(
         client_id,
         technician_id,
         min_amount,
@@ -46,7 +46,6 @@ async def readall_payments(
         skip,
         limit
     )
-
 
 @router.put("/{payment_id}", response_model=PaymentResponse, status_code=200)
 async def update_payment(

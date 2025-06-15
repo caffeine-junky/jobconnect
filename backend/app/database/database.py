@@ -74,3 +74,9 @@ class AsyncDatabase:
         async with self._connection_pool.acquire() as connection:  # type: ignore
             async with connection.transaction():  # type: ignore
                 return await connection.fetch(query, *values)  # type: ignore
+    
+    async def count(self, query: str, *values: Any) -> int:
+        result: Optional[Record] = await self.fetchone(query, *values)
+        if result is None:
+            return 0
+        return result["count"]
