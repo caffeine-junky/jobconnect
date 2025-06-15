@@ -5,7 +5,7 @@ from app.repository import ReviewRepository
 from app.utils.exceptions import (
     NotFoundException,
     InternalServerException,
-    ConfictException,
+    ConflictException,
 )
 
 
@@ -21,7 +21,7 @@ class ReviewService:
     async def create_review(self, data: ReviewCreate) -> ReviewResponse:
         """"""
         if await self.repo.exists(data.booking_id):
-            raise ConfictException("You have already reviewed this booking")
+            raise ConflictException("You have already reviewed this booking")
         review: Optional[ReviewInDB] = await self.repo.create(data.model_dump())
         if review is None:
             raise InternalServerException("Error creating review")

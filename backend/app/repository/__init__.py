@@ -8,6 +8,7 @@ from .search import SearchRepository
 from .notification import NotificationRepository
 from .technician_availability import TechnicianAvailabilityRepository
 from .technician_service import TechnicianServiceRepository
+from .payment import PaymentRepository
 
 __all__ = [
     "AdminRepository",
@@ -20,4 +21,5 @@ __all__ = [
     "NotificationRepository",
     "TechnicianAvailabilityRepository",
     "TechnicianServiceRepository",
+    "PaymentRepository",
 ]

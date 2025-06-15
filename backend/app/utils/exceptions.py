@@ -11,7 +11,7 @@ class BadRequestException(HTTPException):
         super().__init__(status_code=status.HTTP_400_BAD_REQUEST, detail=message)
 
 
-class ConfictException(HTTPException):
+class ConflictException(HTTPException):
     def __init__(self, message: str = "Conflict") -> None:
         super().__init__(status_code=status.HTTP_409_CONFLICT, detail=message)
 

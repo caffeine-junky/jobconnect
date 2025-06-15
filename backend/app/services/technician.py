@@ -10,7 +10,7 @@ from app.repository import TechnicianRepository
 from app.utils.security import SecurityUtils
 from app.utils.exceptions import (
     NotFoundException,
-    ConfictException,
+    ConflictException,
     InternalServerException,
 )
 
@@ -28,7 +28,7 @@ class TechnicianService:
         """"""
         exists, message = await self.repo.exists(data.email, data.phone)
         if exists:
-            raise ConfictException(message)
+            raise ConflictException(message)
         hashed_password: str = SecurityUtils.hash_password(data.password)
         technician: Optional[TechnicianInDB] = await self.repo.create(
             {

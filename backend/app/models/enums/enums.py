@@ -26,3 +26,10 @@ class BookingStatus(StrEnum):
     IN_PROGRESS = "IN_PROGRESS"
     COMPLETED = "COMPLETED"
     CANCELLED = "CANCELLED"
+
+
+class PaymentStatus(StrEnum):
+    PENDING = "PENDING"
+    EZCROW = "EZCROW"
+    COMPLETED = "COMPLETED"
+    RETURNED = "RETURNED"

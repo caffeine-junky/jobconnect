@@ -9,7 +9,7 @@ from app.models import (
 from app.repository import TechnicianServiceRepository
 from app.utils.exceptions import (
     NotFoundException,
-    ConfictException,
+    ConflictException,
     InternalServerException,
 )
 
@@ -29,7 +29,7 @@ class TechnicianServiceService:
     ) -> TechnicianServiceResponse:
         """"""
         if await self.repo.technician_has_service(data.technician_id, data.service_id):
-            raise ConfictException("Technician already has this service")
+            raise ConflictException("Technician already has this service")
         technician_service: Optional[TechnicianServiceInDB] = await self.repo.create(
             data.model_dump()
         )

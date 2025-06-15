@@ -1,3 +1,3 @@
-from .enums import AdminRole, BookingStatus, UserRole
+from .enums import AdminRole, BookingStatus, UserRole, PaymentStatus
 
-__all__ = ["AdminRole", "BookingStatus", "UserRole"]
+__all__ = ["AdminRole", "BookingStatus", "UserRole", "PaymentStatus"]

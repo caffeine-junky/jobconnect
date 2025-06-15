@@ -10,7 +10,7 @@ from app.repository import TechnicianAvailabilityRepository
 from app.utils.exceptions import (
     NotFoundException,
     InternalServerException,
-    ConfictException,
+    ConflictException,
 )
 
 
@@ -27,7 +27,7 @@ class TechnicianAvailablityService:
         self, data: TechnicianAvailabilityCreate
     ) -> TechnicianAvailabilityResponse:
         if await self.repo.timeslot_exists(data.technician_id, data.timeslot):
-            raise ConfictException(
+            raise ConflictException(
                 f"Technician already has a booking at {str(data.timeslot)}, try a different time."
             )
         technician_availability: Optional[
@@ -91,7 +91,7 @@ class TechnicianAvailablityService:
         if data.timeslot is not None and await self.repo.timeslot_exists(
             technician_id, data.timeslot
         ):
-            raise ConfictException(f"You already have a timeslot at that time and day")
+            raise ConflictException(f"You already have a timeslot at that time and day")
         ta: Optional[TechnicianAvailabilityInDB] = await self.repo.readone(
             technician_availability_id
         )

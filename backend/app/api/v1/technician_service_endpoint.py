@@ -38,7 +38,11 @@ async def readall_technician_services(
     )
 
 
-@router.get("/{technician_service_id}", response_model=TechnicianServiceResponse, status_code=200)
+@router.get(
+    "/{technician_service_id}",
+    response_model=TechnicianServiceResponse,
+    status_code=200,
+)
 async def readone_technician_service(
     technician_service_id: UUID,
     service: TechnicianServiceService = Depends(get_technician_service_service),
@@ -46,7 +50,11 @@ async def readone_technician_service(
     return await service.readone_technician_service(technician_service_id)
 
 
-@router.put("/{technician_service_id}", response_model=TechnicianServiceResponse, status_code=200)
+@router.put(
+    "/{technician_service_id}",
+    response_model=TechnicianServiceResponse,
+    status_code=200,
+)
 async def update_technician_service(
     technician_service_id: UUID,
     data: TechnicianServiceUpdate,

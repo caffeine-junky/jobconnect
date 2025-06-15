@@ -5,7 +5,7 @@ from app.repository import ServiceRepository
 from app.utils.exceptions import (
     NotFoundException,
     InternalServerException,
-    ConfictException,
+    ConflictException,
 )
 
 
@@ -23,7 +23,7 @@ class ServiceService:
         data.name = data.name.lower()
         data.description = data.description.lower()
         if await self.repo.exists(data.name):
-            raise ConfictException(f"{data.name} service already exists")
+            raise ConflictException(f"{data.name} service already exists")
         service: Optional[ServiceInDB] = await self.repo.create(data.model_dump())
         if service is None:
             raise InternalServerException("Error creating service")

@@ -6,7 +6,7 @@ from app.models.enums import BookingStatus
 from app.repository import BookingRepository
 from app.utils.exceptions import (
     NotFoundException,
-    ConfictException,
+    ConflictException,
     InternalServerException,
 )
 
@@ -23,7 +23,7 @@ class BookingService:
     async def create_booking(self, data: BookingCreate) -> BookingResponse:
         """"""
         if await self.repo.collides(data.technician_id, data.timeslot):
-            raise ConfictException(
+            raise ConflictException(
                 f"Technician already has a booking at {str(data.timeslot)}, try a different time."
             )
         booking: Optional[BookingInDB] = await self.repo.create(data.model_dump())

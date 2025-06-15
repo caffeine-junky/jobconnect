@@ -21,6 +21,8 @@ from .deps import (
     get_technician_availability_service,
     get_technician_service_repository,
     get_technician_service_service,
+    get_payment_repository,
+    get_payment_service,
     db_dependency,
     admin_repository_dependency,
     admin_service_dependency,
@@ -43,6 +45,8 @@ from .deps import (
     technician_availability_service_dependency,
     technician_service_repository_dependency,
     technician_service_service_dependency,
+    payment_repository_dependency,
+    payment_service_dependency,
 )
 
 __all__ = [
@@ -92,4 +96,6 @@ __all__ = [
     "technician_availability_service_dependency",
     "technician_service_repository_dependency",
     "technician_service_service_dependency",
+    "payment_repository_dependency",
+    "payment_service_dependency",
 ]

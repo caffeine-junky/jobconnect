@@ -9,6 +9,7 @@ from .auth_service import AuthService
 from .notification import NotificationService
 from .technician_availability import TechnicianAvailablityService
 from .technician_service import TechnicianServiceService
+from .payment import PaymentService
 
 __all__ = [
     "AdminService",
@@ -22,4 +23,5 @@ __all__ = [
     "NotificationService",
     "TechnicianAvailablityService",
     "TechnicianServiceService",
+    "PaymentService",
 ]

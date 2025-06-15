@@ -5,7 +5,7 @@ from app.repository import ClientRepository
 from app.utils.security import SecurityUtils
 from app.utils.exceptions import (
     NotFoundException,
-    ConfictException,
+    ConflictException,
     InternalServerException,
 )
 
@@ -23,7 +23,7 @@ class ClientService:
         """"""
         exists, message = await self.repo.exists(data.email, data.phone)
         if exists:
-            raise ConfictException(message)
+            raise ConflictException(message)
         hashed_password: str = SecurityUtils.hash_password(data.password)
         client: Optional[ClientInDB] = await self.repo.create(
             {

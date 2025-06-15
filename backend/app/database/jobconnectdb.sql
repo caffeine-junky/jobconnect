@@ -86,6 +86,19 @@ CREATE TABLE IF NOT EXISTS notification (
     FOREIGN KEY (technician_id) REFERENCES technician (id)
 );
 
+CREATE TABLE IF NOT EXISTS payment (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    booking_id UUID NOT NULL,
+    client_id UUID NOT NULL,
+    technician_id UUID NOT NULL,
+    amount NUMERIC NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'EZCROW', 'COMPLETED', 'RETURNED')),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (booking_id) REFERENCES booking (id),
+    FOREIGN KEY (client_id) REFERENCES client (id),
+    FOREIGN KEY (technician_id) REFERENCES technician (id)
+);
 
 CREATE TABLE IF NOT EXISTS favorite_technician (
     client_id UUID NOT NULL,
