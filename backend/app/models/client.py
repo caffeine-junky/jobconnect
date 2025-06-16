@@ -45,6 +45,7 @@ class ClientUpdate(BaseModel):
     email: Optional[EmailStr] = None
     phone: Optional[Annotated[str, PhoneNumber]] = None
     location: Optional[Location] = None
+    password: Optional[str] = None
 
     class Config:
         json_schema_extra: Dict[str, Any] = {
@@ -57,6 +58,7 @@ class ClientUpdate(BaseModel):
                     "latitude": -26.243,
                     "longitude": 28.05,
                 },
+                "password": "123",
             }
         }
 

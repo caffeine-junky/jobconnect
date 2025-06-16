@@ -4,24 +4,22 @@ from pydantic import BaseModel
 from datetime import datetime
 
 
-class ReviewInDB(BaseModel):
-    id: UUID
+class BaseReview(BaseModel):
     booking_id: UUID
     client_id: UUID
     technician_id: UUID
     rating: int
     comment: Optional[str]
+
+
+class ReviewInDB(BaseReview):
+    id: UUID
     client_name: str
     service_name: str
     created_at: datetime
 
 
-class ReviewCreate(BaseModel):
-    booking_id: UUID
-    client_id: UUID
-    technician_id: UUID
-    rating: int
-    comment: Optional[str]
+class ReviewCreate(BaseReview):
 
     class Config:
         json_schema_extra: Dict[str, Any] = {
@@ -48,13 +46,8 @@ class ReviewUpdate(BaseModel):
         }
 
 
-class ReviewResponse(BaseModel):
+class ReviewResponse(BaseReview):
     id: UUID
-    booking_id: UUID
-    client_id: UUID
-    technician_id: UUID
-    rating: int
-    comment: Optional[str]
     client_name: str
     service_name: str
     created_at: datetime

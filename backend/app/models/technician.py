@@ -49,7 +49,7 @@ class TechnicianUpdate(BaseModel):
     email: Optional[EmailStr] = None
     phone: Optional[Annotated[str, PhoneNumber]] = None
     location: Optional[Location] = None
-    services: Optional[List[str]] = None
+    # services: Optional[List[str]] = None
 
     class Config:
         json_schema_extra: Dict[str, Any] = {
@@ -62,7 +62,7 @@ class TechnicianUpdate(BaseModel):
                     "latitude": -26.243,
                     "longitude": 28.05,
                 },
-                "services": ["plumbing", "electrical"],
+                # "services": ["plumbing", "electrical"],
             }
         }
 

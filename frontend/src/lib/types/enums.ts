@@ -1,12 +1,10 @@
 import { z } from "zod";
 
-export const UserRole = z.enum(["ADMIN", "CLIENT", "TECHNICIAN"]);
-export type UserRoleType = z.infer<typeof UserRole>;
+export const UserRoleSchema = z.enum(["ADMIN", "CLIENT", "TECHNICIAN"]);
 
-export const AdminRole = z.enum(["SUPER_ADMIN", "SUPPORT_ADMIN", "CONTENT_ADMIN"]);
-export type AdminRoleType = z.infer<typeof AdminRole>;
+export const AdminRoleSchema = z.enum(["SUPER_ADMIN", "SUPPORT_ADMIN", "CONTENT_ADMIN"]);
 
-export const BookingStatus = z.enum([
+export const BookingStatusSchema = z.enum([
     "REQUESTED",
     "ACCEPTED",
     "REJECTED",
@@ -14,4 +12,10 @@ export const BookingStatus = z.enum([
     "CANCELLED",
     "COMPLETED",
 ])
-export type BookingStatusType = z.infer<typeof BookingStatus>;
+
+export const PaymentStatusSchema = z.enum(["PENDING", "EZCROW", "COMPLETED", "RETURNED"]);
+
+export type UserRole = z.infer<typeof UserRoleSchema>;
+export type AdminRole = z.infer<typeof AdminRoleSchema>;
+export type BookingStatus = z.infer<typeof BookingStatusSchema>;
+export type PaymentStatus = z.infer<typeof PaymentStatusSchema>;

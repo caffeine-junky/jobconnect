@@ -29,7 +29,7 @@ class TokenData(BaseModel):
 
     email: Optional[EmailStr] = None
     user_id: Optional[UUID] = None
-    role: Optional[UserRole] = None
+    user_role: Optional[UserRole] = None
 
 
 class LoginRequest(BaseModel):

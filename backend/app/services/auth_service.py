@@ -52,7 +52,7 @@ class AuthService:
         if user is None:
             raise UnauthorizedException("Invalid credentials")
 
-        token_data: TokenData = TokenData(email=user.email, user_id=user.id, role=role)
+        token_data: TokenData = TokenData(email=user.email, user_id=user.id, user_role=role)
         access_token: str = SecurityUtils.create_access_token(
             data=token_data,
             expires_delta=timedelta(minutes=settings.TOKEN_EXPIRE_MINUTES),
@@ -67,7 +67,7 @@ class AuthService:
             payload: TokenData = SecurityUtils.decode_token(token)
             email: Optional[str] = payload.email
             user_id: Optional[UUID] = payload.user_id
-            role: Optional[UserRole] = payload.role
+            role: Optional[UserRole] = payload.user_role
 
             if (email is None) or (user_id is None) or (role is None):
                 raise UnauthorizedException("Could not validate credentials")

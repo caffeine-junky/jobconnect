@@ -29,6 +29,15 @@ class TechnicianServiceCreate(BaseTechnicianService):
 
 class TechnicianServiceUpdate(BaseModel):
     experience_years: int
+    price: float
+
+    class Config:
+        json_schema_extra: Dict[str, Any] = {
+            "example": {
+                "experience_years": 2,
+                "price": 150.00,
+            }
+        }
 
 
 class TechnicianServiceResponse(BaseTechnicianService):

@@ -1,7 +1,7 @@
 from uuid import UUID
 from asyncpg import Record  # type: ignore
-from typing import Optional, List, Tuple, Dict, Any
-from datetime import datetime
+from typing import Optional, List, Tuple, Dict, Any, Callable
+# from datetime import datetime
 from app.database import AsyncDatabase
 from app.models import PaymentInDB
 from app.models.enums import PaymentStatus
@@ -26,9 +26,9 @@ class PaymentRepository:
 
     async def exists(self, booking_id: UUID) -> bool:
         """"""
-        query: str = "SELECT COUNT(*) AS n FROM payment WHERE booking_id = $1"
-        n: Optional[int] = await self.db.fetchone(query, booking_id)
-        return n != 0 or n is not None
+        query: str = "SELECT COUNT(*) AS count AS n FROM payment WHERE booking_id = $1"
+        record: Optional[Record] = await self.db.fetchone(query, booking_id)
+        return record["count"] > 0 if record is not None else False
 
     async def create(self, data: Dict[str, Any]) -> Optional[PaymentInDB]:
         """"""
@@ -50,7 +50,7 @@ class PaymentRepository:
         """"""
         query: str = "SELECT * FROM payment WHERE id = $1"
         record: Optional[Record] = await self.db.fetchone(query, payment_id)
-        return self.record_to_payment(record) if record is None else None
+        return self.record_to_payment(record) if record is not None else None
 
     async def readall_payments(
         self,
@@ -65,7 +65,7 @@ class PaymentRepository:
         """"""
         filters: List[str] = []
         params: List[Any] = []
-        n = lambda x: len(filters) + x
+        n: Callable[[int], int] = lambda x: len(filters) + x
 
         if client_id is not None:
             filters.append(f"client_id = ${n(1)}")
@@ -101,7 +101,7 @@ class PaymentRepository:
             f"{key} = ${i}" for i, key in enumerate(data.keys(), start=2)
         ]
         query: str = f"""
-        UPDATE payment SET {", ".join(params)}
+        UPDATE payment SET updated_at = NOW(), {", ".join(params)}
         WHERE id = $1
         RETURNING *
         """
