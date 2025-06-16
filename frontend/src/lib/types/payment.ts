@@ -21,3 +21,7 @@ export const PaymentResponseSchema = BasePaymentSchema.extend({
     created_at: z.string().datetime(),
     updated_at: z.string().datetime()
 });
+
+export type PaymentCreate = z.infer<typeof PaymentCreateSchema>;
+export type PaymentUpdate = z.infer<typeof PaymentUpdateSchema>;
+export type PaymentResponse = z.infer<typeof PaymentResponseSchema>;

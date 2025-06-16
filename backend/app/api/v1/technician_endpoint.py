@@ -53,7 +53,7 @@ async def delete_technician(
     return await service.delete_technician(technician_id)
 
 
-@router.get("/lookup/{email}", response_model=TechnicianResponse, status_code=200)
+@router.get("/lookup/email/{email}", response_model=TechnicianResponse, status_code=200)
 async def readone_technician_by_email(
     email: EmailStr, service: technician_service_dependency
 ) -> TechnicianResponse:

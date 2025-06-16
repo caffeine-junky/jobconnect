@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Header, Depends, HTTPException
 from typing import Union, Dict
 from app.models import (
     Token,
@@ -8,7 +8,8 @@ from app.models import (
     TechnicianResponse,
 )
 from app.models.enums import UserRole
-from app.dependencies import auth_service_dependency
+from app.dependencies import auth_service_dependency, get_auth_service
+from app.services import AuthService
 
 router: APIRouter = APIRouter(prefix="/auth", tags=["Authentication"])
 User = Union[AdminResponse, ClientResponse, TechnicianResponse]
@@ -21,8 +22,18 @@ async def login(form: LoginRequest, service: auth_service_dependency):
 
 
 @router.get(
-    "/me/{token}", response_model=Dict[str, Union[User, UserRole]], status_code=200
+    "/me", 
+    response_model=Dict[str, Union[User, UserRole]], 
+    status_code=200
 )
-async def get_current_user(token: str, service: auth_service_dependency):
+async def get_current_user(
+    authorization: str = Header(..., alias="Authorization"),
+    service: AuthService = Depends(get_auth_service)
+) -> Dict[str, Union[User, UserRole]]:
     """"""
+    # Extract token from "Bearer <token>" format
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Invalid authorization header format")
+    
+    token = authorization[7:]  # Remove "Bearer " prefix
     return await service.get_current_user(token)

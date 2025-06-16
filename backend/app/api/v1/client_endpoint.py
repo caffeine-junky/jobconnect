@@ -2,7 +2,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 from typing import List, Optional
 from pydantic import EmailStr
-from app.models import ClientCreate, ClientUpdate, ClientResponse
+from app.models import ClientCreate, ClientUpdate, ClientResponse, FavoriteTechnicianCreate
 from app.services import ClientService
 from app.dependencies import get_client_service, client_service_dependency
 
@@ -50,7 +50,7 @@ async def delete_client(client_id: UUID, service: client_service_dependency) -> 
     return await service.delete_client(client_id)
 
 
-@router.get("/lookup/{email}", response_model=ClientResponse, status_code=200)
+@router.get("/lookup/email/{email}", response_model=ClientResponse, status_code=200)
 async def readone_client_by_email(
     email: EmailStr, service: client_service_dependency
 ) -> ClientResponse:
@@ -60,15 +60,23 @@ async def readone_client_by_email(
 
 @router.post("/technician/{client_id}/{technician_id}", status_code=200)
 async def add_favorite_technician(
-    client_id: UUID, technician_id: UUID, service: client_service_dependency
+    client_id: UUID,
+    technician_id: UUID,
+    service: client_service_dependency
 ) -> bool:
     """Add a favorite technician to a client"""
-    return await service.add_favorite_technician(client_id, technician_id)
+    return await service.add_favorite_technician(
+        FavoriteTechnicianCreate(client_id=client_id, technician_id=technician_id)
+    )
 
 
 @router.delete("/technician/{client_id}/{technician_id}", status_code=200)
 async def remove_favorite_technician(
-    client_id: UUID, technician_id: UUID, service: client_service_dependency
+    client_id: UUID,
+    technician_id: UUID,
+    service: client_service_dependency
 ) -> bool:
     """Remove a favorite technician from a client"""
-    return await service.remove_favorite_technician(client_id, technician_id)
+    return await service.remove_favorite_technician(
+        FavoriteTechnicianCreate(client_id=client_id, technician_id=technician_id)
+    )

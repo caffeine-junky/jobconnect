@@ -1,6 +1,6 @@
 from uuid import UUID
 from typing import Any, Dict, List, Optional
-from app.models import ClientInDB, ClientCreate, ClientResponse, ClientUpdate
+from app.models import ClientInDB, ClientCreate, ClientResponse, ClientUpdate, FavoriteTechnicianCreate
 from app.repository import ClientRepository
 from app.utils.security import SecurityUtils
 from app.utils.exceptions import (
@@ -95,16 +95,21 @@ class ClientService:
         return client_in_db_to_response(client)
 
     async def add_favorite_technician(
-        self, client_id: UUID, technician_id: UUID
+        self,
+        data: FavoriteTechnicianCreate
     ) -> bool:
         """"""
-        return await self.repo.add_favorite_technician(client_id, technician_id)
+        return await self.repo.add_favorite_technician(
+            data.client_id,
+            data.technician_id
+        )
 
     async def remove_favorite_technician(
-        self, client_id: UUID, technician_id: UUID
+        self,
+        data: FavoriteTechnicianCreate
     ) -> bool:
         """"""
-        return await self.repo.remove_favorite_technician(client_id, technician_id)
+        return await self.repo.remove_favorite_technician(data.client_id, data.technician_id)
 
     async def authenticate(self, email: str, password: str) -> Optional[ClientResponse]:
         """"""
