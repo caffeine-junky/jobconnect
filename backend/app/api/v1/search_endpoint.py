@@ -9,7 +9,7 @@ router: APIRouter = APIRouter(prefix="/search", tags=["Search"])
 
 
 @router.get(
-    "/nearby/{client_id}/", response_model=List[TechnicianResponse], status_code=200
+    "/nearby/{client_id}/{radius_km}/", response_model=List[TechnicianResponse], status_code=200
 )
 async def search_nearby_technicians(
     client_id: UUID,
@@ -25,7 +25,7 @@ async def search_nearby_technicians(
 
 
 @router.get(
-    "/description/{client_id}", response_model=List[TechnicianResponse], status_code=200
+    "/description/{client_id}/{radius_km}/{problem_description}", response_model=List[TechnicianResponse], status_code=200
 )
 async def search_technicians_by_description(
     client_id: UUID,
