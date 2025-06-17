@@ -38,6 +38,8 @@ export default function App() {
 		// 	</Router>
 		// 	<Toaster position="top-center" expand={true} richColors />
 		// </div>
-		<TechnicianCard technician={t}/>
+		<div className="flex h-screen w-screen flex-col p-10">
+			<TechnicianCard technician={t} />
+		</div>
 	);
 }
