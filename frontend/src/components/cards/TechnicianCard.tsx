@@ -23,7 +23,14 @@ export default function TechnicianCard({ technician }: {technician: TechnicianRe
     const renderIcons = () => {
         const numFilled = Math.round(technician.rating);
         const stars = [];
-        
+        for (let i = 1; i <= 5; i++) {
+            if (i <= numFilled) {
+                stars.push();
+            } else {
+                
+            }
+        }
+        return stars;
     }
 
     return (
