@@ -167,19 +167,78 @@ BEGIN
     END IF;
 END$$;
 
--- 4. Create the trigger function to update `search_vector`
+-- Drop the existing trigger and function
+DROP TRIGGER IF EXISTS trg_update_service_search_vector ON service;
+DROP FUNCTION IF EXISTS update_service_search_vector();
+
+-- Create an improved search vector function
 CREATE OR REPLACE FUNCTION update_service_search_vector() RETURNS trigger AS $$
 BEGIN
-    NEW.search_vector :=
-        to_tsvector('english', coalesce(NEW.name, '') || ' ' || coalesce(NEW.description, ''));
+    -- Create a more comprehensive search vector that includes:
+    -- - Original text
+    -- - Text with different word forms
+    -- - Common variations and synonyms
+    NEW.search_vector := 
+        to_tsvector('english', 
+            coalesce(NEW.name, '') || ' ' || 
+            coalesce(NEW.description, '') || ' ' ||
+            -- Add common word variations
+            regexp_replace(coalesce(NEW.name, '') || ' ' || coalesce(NEW.description, ''), 
+                          '(ing|ed|er|est|ly|tion|sion)\\b', '', 'g') || ' ' ||
+            -- Add the original without stemming for exact matches
+            coalesce(NEW.name, '') || ' ' || coalesce(NEW.description, '')
+        ) ||
+        to_tsvector('simple', -- 'simple' doesn't apply stemming
+            coalesce(NEW.name, '') || ' ' || coalesce(NEW.description, '')
+        );
     RETURN NEW;
 END
 $$ LANGUAGE plpgsql;
 
--- 5. Create the trigger itself (will replace if it already exists)
-DROP TRIGGER IF EXISTS trg_update_service_search_vector ON service;
-
+-- Recreate the trigger
 CREATE TRIGGER trg_update_service_search_vector
 BEFORE INSERT OR UPDATE ON service
 FOR EACH ROW
 EXECUTE FUNCTION update_service_search_vector();
+
+-- Update existing records
+UPDATE service SET search_vector = NULL; -- This will trigger the function
+
+CREATE OR REPLACE FUNCTION search_services(search_text TEXT)
+RETURNS TABLE(
+    id UUID,
+    name VARCHAR(255),
+    description TEXT,
+    relevance REAL
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        s.id,
+        s.name,
+        s.description,
+        GREATEST(
+            -- Exact phrase match (highest priority)
+            CASE WHEN s.name ILIKE '%' || search_text || '%' 
+                 OR s.description ILIKE '%' || search_text || '%' 
+                 THEN 1.0 ELSE 0.0 END,
+            -- Full-text search with plainto_tsquery (flexible)
+            ts_rank(s.search_vector, plainto_tsquery('english', search_text)) * 0.8,
+            -- Full-text search with websearch_to_tsquery (handles phrases)
+            ts_rank(s.search_vector, websearch_to_tsquery('english', search_text)) * 0.9,
+            -- Individual word matching
+            ts_rank(s.search_vector, to_tsquery('english', 
+                regexp_replace(trim(search_text), '\s+', ' | ', 'g'))) * 0.7
+        ) as relevance
+    FROM service s
+    WHERE 
+        -- Multiple search strategies
+        s.name ILIKE '%' || search_text || '%'
+        OR s.description ILIKE '%' || search_text || '%'
+        OR s.search_vector @@ plainto_tsquery('english', search_text)
+        OR s.search_vector @@ websearch_to_tsquery('english', search_text)
+        OR s.search_vector @@ to_tsquery('english', 
+            regexp_replace(trim(search_text), '\s+', ' | ', 'g'))
+    ORDER BY relevance DESC, s.name ASC;
+END
+$$ LANGUAGE plpgsql;
