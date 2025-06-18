@@ -75,5 +75,5 @@ export async function readallNotificationsByTechnician(
 }
 
 export async function markAsRead(notificationID: string): Promise<void> {
-    const response = await axios.put(`${URL}/mark/${notificationID}`)
+    await axios.put(`${URL}/mark/${notificationID}`);
 }

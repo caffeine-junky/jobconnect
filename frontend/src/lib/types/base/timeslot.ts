@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const TimeSlotSchema = z.object({
-    stot_date: z.string().date(),
+    slot_date: z.string().date(),
     start_time: z.string().time(),
     end_time: z.string().time()
 })
