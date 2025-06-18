@@ -383,7 +383,6 @@ export default function FavoriteTechniciansView({client}: {client: ClientRespons
             <div className="flex items-center justify-between mb-6">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                        <Heart className="w-6 h-6 text-red-500" />
                         Favorite Technicians
                     </h1>
                     <p className="text-gray-600 mt-1">

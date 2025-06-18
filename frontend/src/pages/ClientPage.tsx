@@ -15,7 +15,8 @@ import {
     CreditCard, 
     Bell,
     ChevronLeft,
-    ChevronRight
+    ChevronRight,
+    Star
 } from "lucide-react";
 
 import Header from "@/components/Views/Header";
@@ -24,6 +25,7 @@ import DescribeProblemView from "@/components/Views/ProblemDescriptionView";
 import ClientBookingView from "@/components/Views/ClientBookingsView";
 import ClientPaymentView from "@/components/Views/PaymentView";
 import NotificationView from "@/components/Views/NotificationView";
+import FavoriteTechniciansView from "@/components/Views/FavoriteTechnicians";
 import { TechnicianProfilePage } from "./TechnicianProfilePage";
 
 export default function ClientDashboard() {
@@ -70,6 +72,11 @@ export default function ClientDashboard() {
             label: "Notifications",
             icon: Bell,
         },
+        {
+            id: "favorite-technicians",
+            label: "Favorite Technicians",
+            icon: Star
+        }
     ];
 
     const fetchCurrentUser = async () => {
@@ -138,6 +145,10 @@ export default function ClientDashboard() {
             case "notifications":
                 return (
                     <NotificationView userID={client?.id} userRole="CLIENT" />
+                );
+            case "favorite-technicians":
+                return (
+                    <FavoriteTechniciansView client={client} />
                 );
             case "technician":
                 if (!currentTechnician) return (<></>);
