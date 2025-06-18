@@ -84,7 +84,7 @@ export default function TechnicianCard({ technician }: {technician: TechnicianRe
     }
     
     return (
-        <Card className="min-w-80 min-h-80 max-w-86 max-h-110">
+        <Card className="min-w-80 min-h-110 max-w-86 max-h-110">
             <CardHeader className="pb-4">
                 {/* Status badges at top left */}
                 <div className="flex gap-2 mb-4">

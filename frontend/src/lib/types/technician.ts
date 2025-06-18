@@ -19,6 +19,7 @@ export const TechnicianUpdateSchema = z.object({
     phone: PhoneSchema.optional(),
     location: LocationSchema.optional(),
     password: z.string().min(3).optional(),
+    is_available: z.boolean().optional()
 });
 
 export const TechnicianResponseSchema = BaseTechnician.extend({

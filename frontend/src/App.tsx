@@ -1,10 +1,13 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import LandingPage from "@/pages/LandingPage";
-import LoginPage from "@/pages/LoginPage";
-import { Toaster } from "sonner";
+// import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+// import LandingPage from "@/pages/LandingPage";
+// import LoginPage from "@/pages/LoginPage";
+// import { Toaster } from "sonner";
 
 import TechnicianCard from "./components/cards/TechnicianCard";
 import type { TechnicianResponse } from "./lib/types/technician";
+import ClientProfile from "./components/profiles/ClientProfile";
+import type { ClientResponse } from "@/lib/types/client";
+import TechnicianProfile from "./components/profiles/TechnicianProfile";
 
 const t: TechnicianResponse = {
 	fullname: "Moses Bongani kubeka",
@@ -24,6 +27,20 @@ const t: TechnicianResponse = {
 	created_at: ""
 }
 
+const c: ClientResponse = {
+	fullname: "Moses Bongani kubeka",
+	email: "mkay.py@gmail.com",
+	phone: "0661547228",
+	id: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+	location: {
+		location_name: "Soshanguve Block L",
+		latitude: -25.987,
+		longitude: 20.767
+	},
+	is_active: true,
+	created_at: ""
+}
+
 export default function App() {
 
 	return (
@@ -38,8 +55,10 @@ export default function App() {
 		// 	</Router>
 		// 	<Toaster position="top-center" expand={true} richColors />
 		// </div>
-		<div className="flex h-screen w-screen flex-col p-10">
+		<div className="flex h-screen w-screen flex-col p-10 gap-4">
 			<TechnicianCard technician={t} />
+			<ClientProfile client={c}/>
+			<TechnicianProfile technician={t}/>
 		</div>
 	);
 }
