@@ -25,3 +25,5 @@ export const PaymentResponseSchema = BasePaymentSchema.extend({
 export type PaymentCreate = z.infer<typeof PaymentCreateSchema>;
 export type PaymentUpdate = z.infer<typeof PaymentUpdateSchema>;
 export type PaymentResponse = z.infer<typeof PaymentResponseSchema>;
+
+

@@ -1,9 +1,9 @@
 import * as notificationService from "@/lib/services/notification";
 import type { NotificationResponse } from "@/lib/types/notification";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Badge } from "./ui/badge";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
 import type { UserRole } from "@/lib/types/enums";
 
@@ -133,7 +133,7 @@ export default function NotificationView({userID, userRole}: {userID: string, us
     }, [userID, userRole]);
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 p-4">
             {/* Header with controls */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div className="flex items-center gap-2">

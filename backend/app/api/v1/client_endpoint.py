@@ -2,7 +2,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 from typing import List, Optional
 from pydantic import EmailStr
-from app.models import ClientCreate, ClientUpdate, ClientResponse, FavoriteTechnicianCreate
+from app.models import ClientCreate, ClientUpdate, ClientResponse, FavoriteTechnicianCreate, TechnicianResponse
 from app.services import ClientService
 from app.dependencies import get_client_service, client_service_dependency
 
@@ -80,3 +80,12 @@ async def remove_favorite_technician(
     return await service.remove_favorite_technician(
         FavoriteTechnicianCreate(client_id=client_id, technician_id=technician_id)
     )
+
+
+@router.get("/favorite/{client_id}", response_model=List[TechnicianResponse])
+async def readall_favorite_technnicians(
+    client_id: UUID,
+    service: client_service_dependency
+):
+    """"""
+    return await service.readall_favorite_technicians(client_id)

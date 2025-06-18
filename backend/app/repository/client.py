@@ -2,8 +2,10 @@ from uuid import UUID
 from typing import Optional, List, Tuple, Dict, Any
 from asyncpg import Record  # type: ignore
 from app.database import AsyncDatabase
-from app.models import ClientInDB
+from app.models import ClientInDB, TechnicianInDB
 from app.models.base import Location, PhoneNumber
+
+from .technician import RETURN_QUERY as TECHNICIAN_RETURN_QUERY, record_to_technician
 
 RETURN_QUERY: str = """
     id,
@@ -154,11 +156,15 @@ class ClientRepository:
         self, client_id: UUID, technician_id: UUID
     ) -> bool:
         """Add a favorite technician to a client"""
+        query: str = "SELECT * FROM favorite_technician WHERE client_id = $1 AND technician_id = $2"
+        result: str = await self.db.execute(query, client_id, technician_id)
+        if "0" not in result:
+            return False
         query: str = (
             "INSERT INTO favorite_technician (client_id, technician_id) VALUES ($1, $2)"
         )
         result: str = await self.db.execute(query, client_id, technician_id)
-        return "0" not in result
+        return True
 
     async def remove_favorite_technician(
         self, client_id: UUID, technician_id: UUID
@@ -167,3 +173,12 @@ class ClientRepository:
         query: str = "DELETE FROM favorite_technician WHERE client_id = $1 AND technician_id = $2"
         result: str = await self.db.execute(query, client_id, technician_id)
         return "0" not in result
+    
+    async def readall_favorite_technicians(self, client_id: UUID) -> List[TechnicianInDB]:
+        """"""
+        query: str = f"""
+        SELECT {TECHNICIAN_RETURN_QUERY} FROM technician t
+        JOIN favorite_technician ft ON ft.technician_id = t.id AND client_id = $1
+        """
+        records: List[Record] = await self.db.fetchall(query, client_id)
+        return [record_to_technician(r) for r in records]

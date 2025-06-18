@@ -5,7 +5,7 @@ from app.database import AsyncDatabase
 from app.models import TechnicianInDB
 
 from .technician import record_to_technician
-from loguru import logger
+# from loguru import logger
 
 
 class SearchRepository:
@@ -98,15 +98,6 @@ class SearchRepository:
 
         # Execute query
         technician_records: List[Record] = await self.db.fetchall(query, *params)
-        [
-            logger.debug(
-                f"""
-            name: {r["fullname"]}, latitude: {r["latitude"]}, longitude: {r["longitude"]}
-            is {r["distance_meters"] / 1000} KM away
-            """
-            )
-            for r in technician_records
-        ]
         return [record_to_technician(record) for record in technician_records]
 
     async def search_technicians_by_description(

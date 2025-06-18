@@ -43,6 +43,8 @@ class AsyncDatabase:
         try:
             sql: str = (Path(__file__).parent / "jobconnectdb.sql").read_text()
             await self.execute(sql)
+            sql: str = (Path(__file__).parent / "dummy.sql").read_text()
+            # await self.execute(sql)
             logger.success("Database tables created")
         except Exception as e:
             logger.error(f"Failed to create database tables: {e}")

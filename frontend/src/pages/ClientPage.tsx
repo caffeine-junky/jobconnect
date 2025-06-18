@@ -21,6 +21,10 @@ import {
 import Header from "@/components/Views/Header";
 import FindTechniciansView from "@/components/Views/FindTechniciansView";
 import DescribeProblemView from "@/components/Views/ProblemDescriptionView";
+import ClientBookingView from "@/components/Views/ClientBookingsView";
+import ClientPaymentView from "@/components/Views/PaymentView";
+import NotificationView from "@/components/Views/NotificationView";
+import { TechnicianProfilePage } from "./TechnicianProfilePage";
 
 export default function ClientDashboard() {
     const [client, setClient] = useState<ClientResponse | null>();
@@ -28,6 +32,12 @@ export default function ClientDashboard() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [activeSection, setActiveSection] = useState("find-technicians");
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [currentTechnician, setCurrentTechnician] = useState<TechnicianResponse | null>(null);
+
+    const setTechnician = (t: TechnicianResponse) => {
+        setActiveSection("technician");
+        setCurrentTechnician(t)
+    }
 
     const sidebarItems = [
         {
@@ -93,10 +103,18 @@ export default function ClientDashboard() {
     }, []);
 
     const renderContent = () => {
+        if (!client) {
+            return (
+                <div className="p-6">
+                    <h2 className="text-2xl font-bold mb-4">Dashboard</h2>
+                    <p className="text-gray-600">Welcome to your dashboard!</p>
+                </div>
+            );
+        }
         switch (activeSection) {
             case "find-technicians":
                 return (
-                    <FindTechniciansView client={client? client : undefined} />
+                    <FindTechniciansView setTechnician={setTechnician} client={client? client : undefined} />
                 );
             case "find-services":
                 return (
@@ -111,24 +129,20 @@ export default function ClientDashboard() {
                 );
             case "bookings":
                 return (
-                    <div className="p-6">
-                        <h2 className="text-2xl font-bold mb-4">Bookings</h2>
-                        <p className="text-gray-600">View and manage your appointments.</p>
-                    </div>
+                    <ClientBookingView client={client ? client : undefined} />
                 );
             case "payments":
                 return (
-                    <div className="p-6">
-                        <h2 className="text-2xl font-bold mb-4">Payments</h2>
-                        <p className="text-gray-600">Manage your payment methods and history.</p>
-                    </div>
+                    <ClientPaymentView client={client ? client : undefined} />
                 );
             case "notifications":
                 return (
-                    <div className="p-6">
-                        <h2 className="text-2xl font-bold mb-4">Notifications</h2>
-                        <p className="text-gray-600">View your recent notifications.</p>
-                    </div>
+                    <NotificationView userID={client?.id} userRole="CLIENT" />
+                );
+            case "technician":
+                if (!currentTechnician) return (<></>);
+                return (
+                    <TechnicianProfilePage technician={currentTechnician} client={client} />
                 );
             default:
                 return (

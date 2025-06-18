@@ -1,6 +1,6 @@
 from uuid import UUID
 from typing import Any, Dict, List, Optional
-from app.models import ClientInDB, ClientCreate, ClientResponse, ClientUpdate, FavoriteTechnicianCreate
+from app.models import ClientInDB, ClientCreate, ClientResponse, ClientUpdate, FavoriteTechnicianCreate, TechnicianResponse, TechnicianInDB
 from app.repository import ClientRepository
 from app.utils.security import SecurityUtils
 from app.utils.exceptions import (
@@ -8,6 +8,7 @@ from app.utils.exceptions import (
     ConflictException,
     InternalServerException,
 )
+from .technician import technician_in_db_to_response
 
 
 def client_in_db_to_response(client: ClientInDB) -> ClientResponse:
@@ -119,3 +120,8 @@ class ClientService:
         if not SecurityUtils.verify_password(password, client.hashed_password):
             return None
         return client_in_db_to_response(client)
+    
+    async def readall_favorite_technicians(self, client_id: UUID) -> List[TechnicianResponse]:
+        """"""
+        technicians: List[TechnicianInDB] = await self.repo.readall_favorite_technicians(client_id)
+        return [technician_in_db_to_response(t) for t in technicians]

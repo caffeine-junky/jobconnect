@@ -1,6 +1,7 @@
 from uuid import UUID
 from typing import Optional, List, Tuple, Dict, Any
 from asyncpg import Record  # type: ignore
+# from loguru import logger
 from app.database import AsyncDatabase
 from datetime import date
 from app.models import BookingInDB
@@ -107,21 +108,21 @@ class BookingRepository:
         filters: List[str] = []
         params: List[Any] = []
         if client_id is not None:
-            filters.append(f"client_id = {len(filters) + 1}")
+            filters.append(f"client_id = ${len(filters) + 1}")
             params.append(client_id)
         if technician_id is not None:
-            filters.append(f"technician_id = {len(filters) + 1}")
+            filters.append(f"technician_id = ${len(filters) + 1}")
             params.append(technician_id)
         if status is not None:
-            filters.append(f"status = {len(filters) + 1}")
+            filters.append(f"status = ${len(filters) + 1}")
             params.append(status)
         if booking_date is not None:
-            filters.append(f"booking_date = {len(filters) + 1}")
+            filters.append(f"booking_date = ${len(filters) + 1}")
             params.append(booking_date)
 
         query: str = f"""
         SELECT {RETURN_QUERY} FROM booking
-        {F"WHERE {" AND ".join(filters)}" if filters else ""}
+        {f"WHERE {" AND ".join(filters)}" if filters else ""}
         OFFSET ${len(params) + 1}
         LIMIT ${len(params) + 2}
         """

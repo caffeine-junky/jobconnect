@@ -23,7 +23,7 @@ type FilterState = {
     searchQuery: string;
 };
 
-export default function FindTechniciansView({client}: {client?: ClientResponse}) {
+export default function FindTechniciansView({client, setTechnician}: {client?: ClientResponse, setTechnician: (t: TechnicianResponse) => void}) {
     const [technicians, setTechnicians] = useState<TechnicianResponse[]>([]);
     const [filteredTechnicians, setFilteredTechnicians] = useState<TechnicianResponse[]>([]);
     const [radiusKM, setRadiusKM] = useState<number>(10);
@@ -326,6 +326,7 @@ export default function FindTechniciansView({client}: {client?: ClientResponse})
                                 <TechnicianCard 
                                     key={technician.id} 
                                     technician={technician}
+                                    setCurrentTechnician={setTechnician}
                                 />
                             ))}
                         </div>

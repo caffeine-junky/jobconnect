@@ -20,7 +20,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { Loader2, MapPin, Filter, Search, MessageSquare, FileText } from "lucide-react";
+import { Loader2, Filter, Search, MessageSquare, FileText } from "lucide-react";
 
 import TechnicianCard from "@/components/cards/TechnicianCard";
 

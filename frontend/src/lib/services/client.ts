@@ -1,6 +1,7 @@
 import axios from "axios";
 import { BASE_API_URL } from "@/lib/constants";
 import type { ClientCreate, ClientUpdate, ClientResponse } from "@/lib/types/client";
+import type { TechnicianResponse } from "../types/technician";
 
 const URL = `${BASE_API_URL}/client`;
 
@@ -60,5 +61,12 @@ export async function removeFavoriteTechnician(
     technician_id: string
 ): Promise<boolean> {
     const response = await axios.delete(`${URL}/technician/${client_id}/${technician_id}`);
+    return response.data;
+}
+
+export async function readallFavoriteTechnicians(
+    clienID: string
+): Promise<TechnicianResponse[]> {
+    const response = await axios.get(`${URL}/favorite/${clienID}`);
     return response.data;
 }

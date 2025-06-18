@@ -2,7 +2,7 @@ import axios from "axios";
 import { BASE_API_URL } from "@/lib/constants";
 import type { TechnicianResponse } from "@/lib/types/technician";
 
-const URL = `${BASE_API_URL}/search/nearby`;
+const URL = `${BASE_API_URL}/search`;
 
 export async function searchNearbyTechnicians(
     client_id: string,
@@ -14,7 +14,7 @@ export async function searchNearbyTechnicians(
         skip: skip,
         limit: limit
     }
-    const response = await axios.get(`${URL}/${client_id}/${radius_km}`, { params });
+    const response = await axios.get(`${URL}/nearby/${client_id}/${radius_km}`, { params });
     return response.data;
 }
 
@@ -29,6 +29,6 @@ export async function searchTechniciansByDescription(
         skip: skip,
         limit: limit
     }
-    const response = await axios.get(`${URL}/${client_id}/${radius_km}/${problem_description}`, { params });
+    const response = await axios.get(`${URL}/description/${client_id}/${radius_km}/${problem_description}`, { params });
     return response.data;
 }

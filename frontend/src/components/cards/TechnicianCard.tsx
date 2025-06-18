@@ -28,7 +28,10 @@ import { BadgeCheckIcon, MapPinIcon, Star } from "lucide-react";
     created_at: string;
 }
  */
-export default function TechnicianCard({ technician }: {technician: TechnicianResponse}) {
+export default function TechnicianCard({ technician, setCurrentTechnician }: {
+    technician: TechnicianResponse,
+    setCurrentTechnician?: (technician: TechnicianResponse) => void
+}) {
     // const navigate = useNavigate();
     
     const getInitials = () => {
@@ -149,7 +152,7 @@ export default function TechnicianCard({ technician }: {technician: TechnicianRe
             <CardFooter className="">
                 <Button 
                     className="w-full cursor-pointer" 
-                    // onClick={() => navigate("/technicianProfile")}
+                    onClick={setCurrentTechnician ? () => setCurrentTechnician(technician) : undefined}
                 >
                     View Profile
                 </Button>
