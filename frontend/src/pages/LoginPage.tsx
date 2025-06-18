@@ -31,6 +31,7 @@ const LoginPage = () => {
         }
         const token = await authService.login(request);
         authService.saveToken(token.access_token);
+        toast.success("You are now logged in");
         navigate(`/dashboard/${activeUserType.toLocaleLowerCase()}`)
     } catch (error) {
         toast.error(`${error}`)

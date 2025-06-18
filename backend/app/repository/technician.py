@@ -21,10 +21,10 @@ RETURN_QUERY: str = """
         JOIN service s ON s.id = ts.service_id
         WHERE ts.technician_id = t.id
     ) AS services,
-    is_available,
+    t.is_available,
     (SELECT COUNT(*) > 0 FROM verified_technician vt WHERE vt.technician_id = t.id) AS is_verified,
-    is_active,
-    created_at
+    t.is_active,
+    t.created_at
 """
 
 
@@ -76,9 +76,9 @@ class TechnicianRepository:
             f"POINT({data['location']['longitude']} {data['location']['latitude']})"
         )
         query: str = f"""
-        INSERT INTO technician t (fullname, email, phone, hashed_password, location_name, location)
+        INSERT INTO technician (fullname, email, phone, hashed_password, location_name, location)
         VALUES ($1, $2, $3, $4, $5, $6)
-        RETURNING {RETURN_QUERY}
+        RETURNING id
         """
         values: Tuple[Any, ...] = (
             data["fullname"],
@@ -88,12 +88,8 @@ class TechnicianRepository:
             data["location"]["location_name"],
             location_point,
         )
-        technician_record: Optional[Record] = await self.db.fetchone(query, *values)
-        return (
-            record_to_technician(technician_record)
-            if technician_record is not None
-            else None
-        )
+        record: Optional[Record] = await self.db.fetchone(query, *values)
+        return await self.readone(record["id"]) if record else None
 
     async def readone(self, technician_id: UUID) -> Optional[TechnicianInDB]:
         """Read one technician from the database"""

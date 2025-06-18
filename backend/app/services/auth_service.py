@@ -80,7 +80,7 @@ class AuthService:
         if not service:
             raise UnauthorizedException("Invalid token role")
 
-        response: Dict[str, Union[User, UserRole]] = {"role": role}
+        response: Dict[str, Union[User, UserRole]] = {"user_role": role}
 
         match role:
             case UserRole.ADMIN:
