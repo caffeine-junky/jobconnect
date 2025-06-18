@@ -1,7 +1,7 @@
 from uuid import UUID
 from typing import Optional, List, Tuple, Dict, Any
-from asyncpg import Record  # type: ignore
-# from loguru import logger
+from asyncpg import Record # type: ignore
+# from loguru import logger  
 from app.database import AsyncDatabase
 from datetime import date
 from app.models import BookingInDB

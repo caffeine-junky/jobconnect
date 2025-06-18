@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import Optional, List
+from typing import Any, Dict, Optional, List
 from datetime import date
 from app.models import BookingInDB, BookingCreate, BookingUpdate, BookingResponse
 from app.models.enums import BookingStatus
@@ -26,7 +26,18 @@ class BookingService:
             raise ConflictException(
                 f"Technician already has a booking at {str(data.timeslot)}, try a different time."
             )
-        booking: Optional[BookingInDB] = await self.repo.create(data.model_dump())
+        entry: Dict[str, Any] = {
+            "client_id": data.client_id,
+            "technician_id": data.technician_id,
+            "service_name": data.service_name,
+            "description": data.description,
+            "booking_date": data.timeslot.slot_date,
+            "start_time": data.timeslot.start_time,
+            "end_time": data.timeslot.end_time,
+            "location_name": data.location.location_name,
+            "location": f"POINT({data.location.longitude} {data.location.latitude})"
+        }
+        booking: Optional[BookingInDB] = await self.repo.create(entry)
         if booking is None:
             raise InternalServerException("Error creating booking")
         return booking_in_db_to_response(booking)

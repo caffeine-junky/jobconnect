@@ -32,7 +32,7 @@ import {
 type SortOption = 'name-asc' | 'name-desc' | 'rating-asc' | 'rating-desc' | 'location-asc' | 'location-desc';
 type FilterOption = 'all' | 'available' | 'verified' | 'unavailable';
 
-export default function FavoriteTechniciansView({client}: {client: ClientResponse}) {
+export default function FavoriteTechniciansView({client, setTechnician}: {client: ClientResponse, setTechnician: (t: TechnicianResponse) => void}) {
     const [technicians, setTechnicians] = useState<TechnicianResponse[]>([]);
     const [filteredTechnicians, setFilteredTechnicians] = useState<TechnicianResponse[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -409,6 +409,7 @@ export default function FavoriteTechniciansView({client}: {client: ClientRespons
                         <TechnicianCard 
                             key={technician.id} 
                             technician={technician}
+                            setCurrentTechnician={setTechnician}
                         />
                     ))}
                 </div>

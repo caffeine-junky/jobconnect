@@ -148,7 +148,7 @@ export default function ClientDashboard() {
                 );
             case "favorite-technicians":
                 return (
-                    <FavoriteTechniciansView client={client} />
+                    <FavoriteTechniciansView client={client} setTechnician={setTechnician} />
                 );
             case "technician":
                 if (!currentTechnician) return (<></>);

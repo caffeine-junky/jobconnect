@@ -71,19 +71,19 @@ export function TechnicianProfilePage({technician, client}: {technician: Technic
         const completeBookingData: BookingCreate = {
             client_id: client.id,
             technician_id: technician.id,
-            location: bookingData.location!,
             service_name: bookingData.service_name,
+            location: bookingData.location!,
             description: bookingData.description,
             timeslot: bookingData.timeslot!
         };
 
         setIsLoading(true);
         try {
-            const response: BookingResponse = await bookingService.createBooking(completeBookingData);
+            await bookingService.createBooking(completeBookingData);
             toast.success(`A booking request has been sent to ${technician.fullname}`);
             await notificationService.createNotification({
                 technician_id: technician.id,
-                client_id: client.id,
+                client_id: null,
                 title: "Booking Request",
                 message: `You have a new booking request from ${client.fullname} for ${completeBookingData.service_name}`,
             });
