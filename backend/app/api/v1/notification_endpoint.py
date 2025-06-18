@@ -62,3 +62,11 @@ async def readall_notifications_by_technician(
     return await notification_service.readall_notifications_by_techniian_id(
         technician_id, read, skip, limit
     )
+
+@router.put("/mark/{notification_id}")
+async def mark_as_read(
+    notification_id: UUID,
+    notification_service: NotificationService = Depends(get_notification_service),
+):
+    """"""
+    await notification_service.mark_as_read(notification_id)

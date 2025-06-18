@@ -73,3 +73,7 @@ export async function readallNotificationsByTechnician(
     const response = await axios.get(`${URL}/technician/${technician_id}`, { params });
     return response.data;
 }
+
+export async function markAsRead(notificationID: string): Promise<void> {
+    const response = await axios.put(`${URL}/mark/${notificationID}`)
+}

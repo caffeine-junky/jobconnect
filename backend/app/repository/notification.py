@@ -147,3 +147,8 @@ class NotificationRepository:
             self.record_to_notification(notification_record)
             for notification_record in notification_records
         ]
+    
+    async def mark_as_read(self, notification_id: UUID) -> None:
+        """"""
+        query: str = "UPDATE notification SET is_read TRUE WHERE notification_id = $1"
+        await self.db.execute(query, notification_id)

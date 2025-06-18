@@ -82,3 +82,7 @@ class NotificationService:
             self.notification_in_db_to_response(notification)
             for notification in notifications
         ]
+    
+    async def mark_as_read(self, notification_id: UUID) -> None:
+        """"""
+        await self.repo.mark_as_read(notification_id)
