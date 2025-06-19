@@ -231,7 +231,7 @@ export default function ClientDashboard() {
                                         variant={activeSection === item.id ? "default" : "ghost"}
                                         className={`
                                             w-full gap-3 transition-all duration-200
-                                            ${sidebarOpen ? 'justify-start px-3' : 'justify-center px-0'}
+                                            ${sidebarOpen ? 'justify-start px-3' : 'justify-center px-0 rounded-b-xl'}
                                             
                                         `}
                                         onClick={() => setActiveSection(item.id)}

@@ -22,7 +22,7 @@ import {
 import Header from "@/components/Views/Header";
 import AnalyticsView from "@/components/Views/technician/AnalyticsView";
 import TechnicianBookingView from "@/components/Views/technician/TechnicianBookingView";
-import ClientPaymentView from "@/components/Views/PaymentView";
+import PaymentsView from "@/components/Views/technician/PaymentsView";
 import NotificationView from "@/components/Views/NotificationView";
 import ServicesView from "@/components/Views/technician/ServicesView";
 
@@ -120,7 +120,7 @@ export default function TechnicianDashboard() {
                 );
             case "payments":
                 return (
-                    <>Payments</>
+                    <PaymentsView technician={technician} />
                 );
             case "notifications":
                 return (
