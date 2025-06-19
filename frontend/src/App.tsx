@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LandingPage from "@/pages/LandingPage";
 import LoginPage from "@/pages/LoginPage";
-import ClientDashboard from "@/pages/ClientPage";
+import ClientDashboard from "@/pages/ClientDashboard";
+import TechnicianDashboard from "@/pages/TechnicianDashboard";
 import { Toaster } from "sonner";
 
 export default function App() {
@@ -13,6 +14,7 @@ export default function App() {
 					<Route path="/" element={<LandingPage />} />
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/dashboard/client" element={<ClientDashboard />} />
+					<Route path="/dashboard/technician" element={<TechnicianDashboard />} />
 					{/* Catch-all route for 404s */}
 					<Route path="*" element={<h1>Not Found</h1>} />
 				</Routes>

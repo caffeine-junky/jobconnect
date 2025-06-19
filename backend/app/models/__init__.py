@@ -34,6 +34,7 @@ from .technician_availability import (
     TechnicianAvailabilityUpdate,
 )
 from .payment_models import PaymentInDB, PaymentCreate, PaymentResponse, PaymentUpdate
+from .technician_report import TechnicianReport
 
 __all__ = [
     "AdminInDB",
@@ -84,4 +85,5 @@ __all__ = [
     "PaymentCreate",
     "PaymentResponse",
     "PaymentUpdate",
+    "TechnicianReport"
 ]

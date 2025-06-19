@@ -23,6 +23,8 @@ from .deps import (
     get_technician_service_service,
     get_payment_repository,
     get_payment_service,
+    get_report_service,
+    get_report_repository,
     db_dependency,
     admin_repository_dependency,
     admin_service_dependency,
@@ -47,6 +49,8 @@ from .deps import (
     technician_service_service_dependency,
     payment_repository_dependency,
     payment_service_dependency,
+    report_repository_dependency,
+    report_service_dependency
 )
 
 __all__ = [
@@ -74,6 +78,8 @@ __all__ = [
     "get_technician_service_service",
     "get_payment_repository",
     "get_payment_service",
+    "get_report_repository",
+    "get_report_service",
     "db_dependency",
     "admin_repository_dependency",
     "admin_service_dependency",
@@ -100,4 +106,6 @@ __all__ = [
     "technician_service_service_dependency",
     "payment_repository_dependency",
     "payment_service_dependency",
+    "report_repository_dependency",
+    "report_service_dependency"
 ]

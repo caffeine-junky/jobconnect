@@ -13,6 +13,7 @@ from app.repository import (
     TechnicianAvailabilityRepository,
     TechnicianServiceRepository,
     PaymentRepository,
+    ReportRepository
 )
 from app.services import (
     AdminService,
@@ -27,6 +28,7 @@ from app.services import (
     TechnicianAvailablityService,
     TechnicianServiceService,
     PaymentService,
+    ReportService
 )
 
 
@@ -174,6 +176,17 @@ async def get_payment_service(
     return PaymentService(repo)
 
 
+async def get_report_repository(
+    db: AsyncDatabase = Depends(get_db),
+) -> ReportRepository:
+    return ReportRepository(db)
+
+async def get_report_service(
+    repo: ReportRepository = Depends(get_report_repository)
+) -> ReportService:
+    return ReportService(repo)
+
+
 db_dependency = Annotated[AsyncDatabase, Depends(get_db)]
 
 admin_repository_dependency = Annotated[AdminRepository, Depends(get_admin_repository)]
@@ -243,3 +256,7 @@ payment_repository_dependency = Annotated[
 ]
 
 payment_service_dependency = Annotated[PaymentService, Depends(get_payment_service)]
+
+report_repository_dependency = Annotated[ReportRepository, Depends(get_report_repository)]
+
+report_service_dependency = Annotated[ReportService, Depends(get_report_service)]
