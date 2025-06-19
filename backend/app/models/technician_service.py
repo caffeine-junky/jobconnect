@@ -40,7 +40,7 @@ class TechnicianServiceUpdate(BaseModel):
         }
 
 
-class TechnicianServiceResponse(BaseTechnicianService):
+class TechnicianServiceResponse(TechnicianServiceInDB):
     class Config:
         json_schema_extra: Dict[str, Any] = {
             "example": {

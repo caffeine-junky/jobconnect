@@ -77,7 +77,7 @@ class BookingService:
         if booking is None:
             raise NotFoundException("Booking not found")
         booking: Optional[BookingInDB] = await self.repo.update(
-            booking_id, data.model_dump()
+            booking_id, data.model_dump(exclude_unset=True)
         )
         if booking is None:
             raise InternalServerException("Error updating booking")

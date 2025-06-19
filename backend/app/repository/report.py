@@ -142,7 +142,7 @@ class ReportRepository:
                 COALESCE(SUM(ST_Distance(t.location, b.location) / 1000.0), 0) as total_distance_km
             FROM booking b
             JOIN technician t ON t.id = $1
-            WHERE b.technician_id = $1
+            WHERE b.technician_id = $1 AND b.status = 'COMPLETED'
         ),
         review_stats AS (
             SELECT 

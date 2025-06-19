@@ -21,9 +21,10 @@ import {
 
 import Header from "@/components/Views/Header";
 import AnalyticsView from "@/components/Views/technician/AnalyticsView";
-import ClientBookingView from "@/components/Views/ClientBookingsView";
+import TechnicianBookingView from "@/components/Views/technician/TechnicianBookingView";
 import ClientPaymentView from "@/components/Views/PaymentView";
 import NotificationView from "@/components/Views/NotificationView";
+import ServicesView from "@/components/Views/technician/ServicesView";
 
 export default function TechnicianDashboard() {
     const [technician, setTechnician] = useState<TechnicianResponse | null>();
@@ -115,7 +116,7 @@ export default function TechnicianDashboard() {
                 );
             case "bookings":
                 return (
-                    <>Bookings</>
+                    <TechnicianBookingView technician={technician} />
                 );
             case "payments":
                 return (
@@ -123,11 +124,11 @@ export default function TechnicianDashboard() {
                 );
             case "notifications":
                 return (
-                    <>Notifications</>
+                    <NotificationView userID={technician.id} userRole="TECHNICIAN" />
                 );
             case "services":
                 return (
-                    <>Services</>
+                    <ServicesView technician={technician} />
                 );
             case "reviews":
                 return (<>Reviews</>);
